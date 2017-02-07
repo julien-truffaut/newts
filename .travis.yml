@@ -7,8 +7,8 @@ notifications:
   email:
   - truffaut.julien@gmail.com
 script:
-  - sbt ++$TRAVIS_SCALA_VERSION newts{TARGET}/$PRE
-  - sbt ++$TRAVIS_SCALA_VERSION newts{TARGET}/test packageSrc
+  - sbt ++$TRAVIS_SCALA_VERSION newts${TARGET}/$PRE
+  - sbt ++$TRAVIS_SCALA_VERSION newts${TARGET}/test packageSrc
 env:
   matrix:
     - TARGET=JVM PRE=test:compile
