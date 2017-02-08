@@ -25,7 +25,7 @@ lazy val buildSettings = Seq(
     Resolver.sonatypeRepo("releases"),
     Resolver.sonatypeRepo("snapshots")
   ),
-  scmInfo := Some(ScmInfo(url("https://github.com/julien-truffaut/newts"), "scm:git:git@github.com:julien-truffaut/netws.git"))
+  scmInfo := Some(ScmInfo(url("https://github.com/julien-truffaut/newts"), "scm:git:git@github.com:julien-truffaut/newts.git"))
 )
 
 lazy val cats      = Def.setting("org.typelevel"   %%% "cats"       % "0.9.0")
@@ -56,24 +56,24 @@ lazy val newtsSettings    = buildSettings ++ publishSettings
 lazy val newtsJvmSettings = newtsSettings
 lazy val newtsJsSettings  = newtsSettings ++ scalajsSettings
 
-lazy val netwsCrossSettings = (_: CrossProject)
+lazy val newtsCrossSettings = (_: CrossProject)
   .jvmSettings(newtsJvmSettings: _*)
   .jsSettings(newtsJsSettings: _*)
 
-lazy val netws = project.in(file("."))
-  .settings(moduleName := "netws")
+lazy val newts = project.in(file("."))
+  .settings(moduleName := "newts")
   .settings(newtsSettings)
-  .aggregate(netwsJVM, netwsJS)
-  .dependsOn(netwsJVM, netwsJS)
+  .aggregate(newtsJVM, newtsJS)
+  .dependsOn(newtsJVM, newtsJS)
 
-lazy val netwsJVM = project.in(file(".netwsJVM"))
+lazy val newtsJVM = project.in(file(".newtsJVM"))
   .settings(newtsJvmSettings)
   .aggregate(coreJVM, testJVM, bench)
   .dependsOn(
     coreJVM, testJVM % "test-internal -> test",
     bench % "compile-internal;test-internal -> test")
 
-lazy val netwsJS = project.in(file(".netwsJS"))
+lazy val newtsJS = project.in(file(".newtsJS"))
   .settings(newtsJsSettings)
   .aggregate(coreJS, testJS)
   .dependsOn(coreJS, testJS  % "test-internal -> test")
@@ -82,14 +82,14 @@ lazy val coreJVM = core.jvm
 lazy val coreJS  = core.js
 lazy val core    = crossProject
   .settings(moduleName := "newts-core")
-  .configureCross(netwsCrossSettings)
+  .configureCross(newtsCrossSettings)
   .settings(libraryDependencies += cats.value)
 
 lazy val testJVM = test.jvm
 lazy val testJS  = test.js
 lazy val test    = crossProject.dependsOn(core)
   .settings(moduleName := "newts-test")
-  .configureCross(netwsCrossSettings)
+  .configureCross(newtsCrossSettings)
   .settings(noPublishSettings: _*)
   .settings(libraryDependencies ++= Seq(cats.value, catsLaws.value, scalatest.value))
 
