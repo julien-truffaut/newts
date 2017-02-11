@@ -4,7 +4,7 @@ import cats.Semigroup
 import cats.kernel.Order
 import cats.syntax.order._
 
-final case class Min[A](value: A)
+final case class Min[A](value: A) extends AnyVal
 
 object Min {
   implicit def instances[A: Order]: Order[Min[A]] with Semigroup[Min[A]]  = new Order[Min[A]] with Semigroup[Min[A]] {

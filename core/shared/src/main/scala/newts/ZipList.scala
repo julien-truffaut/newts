@@ -4,7 +4,7 @@ import cats.Apply
 import cats.instances.list._
 import cats.kernel.Eq
 
-final case class ZipList[A](value: List[A])
+final case class ZipList[A](value: List[A]) extends AnyVal
 
 object ZipList {
 

@@ -3,7 +3,7 @@ package newts
 import cats.Monoid
 import cats.kernel.Eq
 
-final case class Conjunction(value: Boolean)
+final case class Conjunction(value: Boolean) extends AnyVal
 
 object Conjunction {
   implicit val instances: Monoid[Conjunction] with Eq[Conjunction] = new Monoid[Conjunction] with Eq[Conjunction]{
