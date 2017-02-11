@@ -5,7 +5,7 @@ import java.util.concurrent.TimeUnit
 import cats.Cartesian
 import cats.instances.string._
 import cats.kernel.{Monoid, Semigroup}
-import newts.{Conjunction, Min, ZipList}
+import newts.{All, Min, ZipList}
 import org.openjdk.jmh.annotations._
 
 @BenchmarkMode(Array(Mode.Throughput))
@@ -22,7 +22,7 @@ class NewtypeBench {
   def and(b1: Boolean, b2: Boolean): Boolean = b1 && b2
 
   @Benchmark def stdCombine      : Boolean      = and(true, false)
-  @Benchmark def anyvalCombine   : Conjunction  = Monoid[Conjunction].combine(Conjunction(true) , Conjunction(false))
+  @Benchmark def anyvalCombine   : All  = Monoid[All].combine(All(true) , All(false))
   @Benchmark def scalazCombine   : ConjunctionZ = Monoid[ConjunctionZ].combine(scalaz.True, scalaz.False)
   @Benchmark def shapelessCombine: ConjunctionS = Monoid[ConjunctionS].combine(shapeless.True, shapeless.False)
 
