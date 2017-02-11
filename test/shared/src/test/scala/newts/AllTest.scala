@@ -8,7 +8,7 @@ class AllTest extends NewtsSuite {
   checkAll("All", OrderLaws[All].eqv)
 
   test("combine"){
-    All(true)  |+| All(true)  shouldEqual All(true)
+    true.all   |+| true.all   shouldEqual true.all
     All(true)  |+| All(false) shouldEqual All(false)
     All(false) |+| All(true)  shouldEqual All(false)
     All(false) |+| All(false) shouldEqual All(false)

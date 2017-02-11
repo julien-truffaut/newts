@@ -10,7 +10,7 @@ class ZipListTest extends NewtsSuite {
   checkAll("ZipList[Int]", OrderLaws[ZipList[Int]].eqv)
 
   test("ap"){
-    (ZipList(List[Int => Int](_ + 1, _ * 2, _ + 2)) ap ZipList(List(1,2,3))) shouldEqual ZipList(List(2,4,5))
+    (List[Int => Int](_ + 1, _ * 2, _ + 2).zipList ap List(1,2,3).zipList) shouldEqual ZipList(List(2,4,5))
   }
 
 }
