@@ -17,7 +17,7 @@ trait NewtsSuite extends FunSuite
   with ArbitraryInstances
 
 trait ArbitraryInstances {
-  implicit def firstArbitrary[A: Arbitrary]: Arbitrary[First[A]] = Arbitrary(arbitrary[Option[A]].map(First(_)))
-  implicit def lastArbitrary[A: Arbitrary] : Arbitrary[Last[A]]  = Arbitrary(arbitrary[Option[A]].map(Last(_)))
+  implicit def firstArbitrary[A: Arbitrary]: Arbitrary[FirstOption[A]] = Arbitrary(arbitrary[Option[A]].map(FirstOption(_)))
+  implicit def lastArbitrary[A: Arbitrary] : Arbitrary[LastOption[A]]  = Arbitrary(arbitrary[Option[A]].map(LastOption(_)))
   implicit def zipListArbitrary[A: Arbitrary]: Arbitrary[ZipList[A]] = Arbitrary(arbitrary[List[A]].map(ZipList(_)))
 }

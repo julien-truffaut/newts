@@ -21,6 +21,7 @@ lazy val buildSettings = Seq(
     case Some((2, 10)) => Seq("-Yno-generic-signatures") // no generic signatures for scala 2.10.x, see SI-7932, #571 and #828
     case _             => Seq()
   }),
+  addCompilerPlugin(kindProjector),
   resolvers ++= Seq(
     Resolver.sonatypeRepo("releases"),
     Resolver.sonatypeRepo("snapshots")
@@ -32,6 +33,8 @@ lazy val cats      = Def.setting("org.typelevel"   %%% "cats"       % "0.9.0")
 lazy val catsLaws  = Def.setting("org.typelevel"   %%% "cats-laws"  % "0.9.0")
 
 lazy val scalatest = Def.setting("org.scalatest"   %%% "scalatest"  % "3.0.1"  % "test")
+
+lazy val kindProjector  = "org.spire-math"  % "kind-projector" % "0.9.3" cross CrossVersion.binary
 
 lazy val tagName = Def.setting(
  s"v${if (releaseUseGlobalVersion.value) (version in ThisBuild).value else version.value}")
