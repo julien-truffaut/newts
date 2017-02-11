@@ -13,9 +13,10 @@ object ZipList {
       ZipList(fa.value.map(f))
 
     def ap[A, B](ff: ZipList[A => B])(fa: ZipList[A]): ZipList[B] =
-      ZipList(
-        ff.value.zip(fa.value).map{ case (f, a) => f(a) }
-      )
+      map(product(ff, fa)){case (f, a) => f(a)}
+
+    override def product[A, B](fa: ZipList[A], fb: ZipList[B]): ZipList[(A, B)] =
+      ZipList(fa.value.zip(fb.value))
   }
 
   implicit def eqInstances[A: Eq]: Eq[ZipList[A]] = Eq.by(_.value)

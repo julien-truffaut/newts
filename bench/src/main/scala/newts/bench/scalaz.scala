@@ -1,6 +1,6 @@
 package newts.bench
 
-import cats.Monoid
+import cats.{Apply, Monoid}
 
 object scalaz {
 
@@ -26,5 +26,17 @@ object scalaz {
 
   val True : ConjunctionZ = tag[Conjunction](true)
   val False: ConjunctionZ = tag[Conjunction](false)
+
+  sealed trait Zip
+
+  type ZipListZ[A] = List[A] @@ Zip
+
+  implicit val zipListZApply: Apply[ZipListZ] = new Apply[ZipListZ]{
+    def ap[A, B](ff: ZipListZ[A => B])(fa: ZipListZ[A]): ZipListZ[B] = map(product(ff, fa)){case (f, a) => f(a)}
+    def map[A, B](fa: ZipListZ[A])(f: (A) => B): ZipListZ[B] = tag[Zip](untag(fa).map(f))
+
+    override def product[A, B](fa: ZipListZ[A], fb: ZipListZ[B]): ZipListZ[(A, B)] =
+      tag[Zip](untag(fa).zip(untag(fb)))
+  }
 
 }
