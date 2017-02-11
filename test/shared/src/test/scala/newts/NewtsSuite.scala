@@ -1,7 +1,7 @@
 package newts
 
 import cats.instances.AllInstances
-import cats.syntax.AllSyntax
+import newts.syntax.AllSyntax
 import org.scalacheck.Arbitrary
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatest.prop.GeneratorDrivenPropertyChecks
@@ -12,8 +12,9 @@ trait NewtsSuite extends FunSuite
   with Matchers
   with GeneratorDrivenPropertyChecks
   with Discipline
-  with AllInstances
   with AllSyntax
+  with AllInstances
+  with cats.syntax.AllSyntax
   with ArbitraryInstances
 
 trait ArbitraryInstances {

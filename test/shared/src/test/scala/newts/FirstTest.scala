@@ -7,7 +7,7 @@ class FirstTest extends NewtsSuite {
   checkAll("First[Int]", SemigroupKTests[First].semigroupK[Int])
 
   test("combine"){
-    First(1) |+| First(2) shouldEqual First(1)
+    1.first |+| 2.first shouldEqual First(1)
   }
 
 }
