@@ -18,14 +18,16 @@ object scalaz {
 
   type ConjunctionZ = Boolean @@ Conjunction
 
+  def fromBoolean(b: Boolean): ConjunctionZ = tag[Conjunction](b)
+
   implicit val conjunctionZMonoid: Monoid[ConjunctionZ] = new Monoid[ConjunctionZ]{
     def empty: ConjunctionZ = tag[Conjunction](true)
     def combine(x: ConjunctionZ, y: ConjunctionZ): ConjunctionZ =
       tag[Conjunction](untag(x) && untag(y))
   }
 
-  val True : ConjunctionZ = tag[Conjunction](true)
-  val False: ConjunctionZ = tag[Conjunction](false)
+  val True : ConjunctionZ = fromBoolean(true)
+  val False: ConjunctionZ = fromBoolean(false)
 
   sealed trait Zip
 

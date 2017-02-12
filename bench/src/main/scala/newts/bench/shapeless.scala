@@ -20,6 +20,8 @@ object shapeless {
 
   type ConjunctionS = Boolean @@ Conjunction
 
+  def fromBoolean(b: Boolean): ConjunctionS = if(b) True else False
+
   implicit val conjunctionSMonoid: Monoid[ConjunctionS] = new Monoid[ConjunctionS]{
     def empty: ConjunctionS = True
     def combine(x: ConjunctionS, y: ConjunctionS): ConjunctionS =

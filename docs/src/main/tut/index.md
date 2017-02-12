@@ -2,6 +2,7 @@
 layout: home
 title:  "Home"
 section: "home"
+position: 1
 ---
 
 [![Build Status](https://travis-ci.org/julien-truffaut/newts.svg?branch=master)](https://travis-ci.org/julien-truffaut/newts)
