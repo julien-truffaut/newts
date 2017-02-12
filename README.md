@@ -1,5 +1,3 @@
 # newts
 
-[![Build Status](https://travis-ci.org/julien-truffaut/newts.svg?branch=master)](https://travis-ci.org/julien-truffaut/newts)
-
-Newtype for cats
+Please check the [website](http://julien-truffaut.github.io/newts/) for the documentation
