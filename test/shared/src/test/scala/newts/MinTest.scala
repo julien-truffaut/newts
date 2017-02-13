@@ -8,8 +8,8 @@ class MinTest extends NewtsSuite {
   checkAll("Min[Int]", OrderLaws[Min[Int]].order)
 
   test("combine"){
-    Min(5) |+| Min(1) shouldEqual Min(1)
-    Min(1) |+| Min(5) shouldEqual Min(1)
+    5.asMin |+| 1.asMin shouldEqual Min(1)
+    1.asMin |+| 5.asMin shouldEqual Min(1)
   }
 
 }

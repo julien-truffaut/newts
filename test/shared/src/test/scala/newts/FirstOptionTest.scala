@@ -10,8 +10,8 @@ class FirstOptionTest extends NewtsSuite {
   checkAll("FirstOption[Int]", OrderLaws[FirstOption[Int]].eqv)
 
   test("combine"){
-    FirstOption(Some(1))   |+| FirstOption(Some(2)) shouldEqual FirstOption(Some(1))
-    FirstOption(none[Int]) |+| FirstOption(Some(2)) shouldEqual FirstOption(Some(2))
+    1.some.asFirstOption    |+| 2.some.asFirstOption shouldEqual FirstOption(Some(1))
+    none[Int].asFirstOption |+| 2.some.asFirstOption shouldEqual FirstOption(Some(2))
   }
 
 }

@@ -62,6 +62,18 @@ intNel.reduceMap(Min(_))
 strings.foldMap(Dual(_))
 ```
 
+Instead of using newtype constructors, one can use `newts.syntax`:
+
+```tut:silent
+import newts.syntax.all._
+import cats.syntax.all._
+```
+
+```tut
+strings.foldMap(_.asDual)
+ints.foldMap(_.some.asLastOption)
+```
+
 ## Maintainers and contributors
 
 The current maintainers (people who can merge pull requests) are:

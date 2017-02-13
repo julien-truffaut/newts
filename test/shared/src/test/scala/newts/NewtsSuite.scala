@@ -19,13 +19,13 @@ trait NewtsSuite extends FunSuite
   with ArbitraryInstances
 
 trait ArbitraryInstances {
-  val allIso: Iso[Boolean, All] = Iso(All(_))(_.value)
-  def dualIso[A]: Iso[A, Dual[A]] = Iso[A, Dual[A]](Dual(_))(_.value)
-  def firstIso[A]: Iso[A, First[A]] = Iso[A, First[A]](First(_))(_.value)
-  def firstOptionIso[A]: Iso[Option[A], FirstOption[A]] = Iso[Option[A], FirstOption[A]](FirstOption(_))(_.value)
-  def lastOptionIso[A]: Iso[Option[A], LastOption[A]] = Iso[Option[A], LastOption[A]](LastOption(_))(_.value)
-  def minIso[A]: Iso[A, Min[A]] = Iso[A, Min[A]](Min(_))(_.value)
-  def zipListIso[A]: Iso[List[A], ZipList[A]] = Iso[List[A], ZipList[A]](ZipList(_))(_.value)
+  val allIso: Iso[Boolean, All] = Iso(All(_))(_.getAll)
+  def dualIso[A]: Iso[A, Dual[A]] = Iso[A, Dual[A]](Dual(_))(_.getDual)
+  def firstIso[A]: Iso[A, First[A]] = Iso[A, First[A]](First(_))(_.getFirst)
+  def firstOptionIso[A]: Iso[Option[A], FirstOption[A]] = Iso[Option[A], FirstOption[A]](FirstOption(_))(_.getFirstOption)
+  def lastOptionIso[A]: Iso[Option[A], LastOption[A]] = Iso[Option[A], LastOption[A]](LastOption(_))(_.getLastOption)
+  def minIso[A]: Iso[A, Min[A]] = Iso[A, Min[A]](Min(_))(_.getMin)
+  def zipListIso[A]: Iso[List[A], ZipList[A]] = Iso[List[A], ZipList[A]](ZipList(_))(_.getZipList)
 
   def arbFromIso[A: Arbitrary, B](iso: Iso[A, B]): Arbitrary[B] = Arbitrary(arbitrary[A].map(iso.get))
   def cogenFromIso[A: Cogen, B](iso: Iso[A, B]): Cogen[B] = Cogen[A].contramap(iso.reverseGet)

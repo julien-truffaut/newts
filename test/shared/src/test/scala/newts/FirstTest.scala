@@ -10,7 +10,7 @@ class FirstTest extends NewtsSuite {
   checkAll("First[Int]", OrderLaws[First[Int]].eqv)
 
   test("combine"){
-    1.first |+| 2.first shouldEqual First(1)
+    1.asFirst |+| 2.asFirst shouldEqual First(1)
   }
 
 }
