@@ -1,6 +1,6 @@
 package newts
 
-import cats.{MonadCombine, Monoid, MonoidK}
+import cats.{MonadCombine, Monoid, MonoidK, Show}
 import cats.instances.option._
 import cats.kernel.Eq
 
@@ -28,4 +28,8 @@ object FirstOption {
   implicit def monoidInstance[A]: Monoid[FirstOption[A]] = MonoidK[FirstOption].algebra
 
   implicit def eqInstance[A: Eq]: Eq[FirstOption[A]] = Eq.by(_.getFirstOption)
+
+  implicit def showInstance[A: Show]: Show[FirstOption[A]] = new Show[FirstOption[A]] {
+    override def show(f: FirstOption[A]): String = s"FirstOption(${implicitly[Show[Option[A]]].show(f.getFirstOption)})"
+  }
 }
