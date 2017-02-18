@@ -1,6 +1,6 @@
 package newts
 
-import cats.{Eq, Semigroup, SemigroupK}
+import cats.{Eq, Semigroup, SemigroupK, Show}
 
 final case class First[A](getFirst: A) extends AnyVal
 
@@ -12,4 +12,6 @@ object First {
   implicit def semigroupInstance[A]: Semigroup[First[A]] = SemigroupK[First].algebra
 
   implicit def eqInstance[A: Eq]: Eq[First[A]] = Eq.by(_.getFirst)
+
+  implicit def showIntance[A]: Show[First[A]] = (f: First[A]) => s"First(${f.getFirst})"
 }

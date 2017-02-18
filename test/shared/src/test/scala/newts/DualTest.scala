@@ -22,5 +22,4 @@ class DualTest extends NewtsSuite {
 
     xs.reduceMap(_.asFirst.asDual).getDual.getFirst shouldEqual 5
   }
-
 }
