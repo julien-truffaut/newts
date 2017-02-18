@@ -1,6 +1,6 @@
 package newts
 
-import cats.{Monoid, Semigroup}
+import cats.{Monoid, Semigroup, Show}
 import cats.kernel.Eq
 
 final case class Dual[A](getDual: A) extends AnyVal
@@ -11,6 +11,8 @@ object Dual extends DualInstances0 {
   }
 
   implicit def dualEq[A: Eq]: Eq[Dual[A]] = Eq.by(_.getDual)
+
+  implicit def dualInstances[A](implicit ev: Show[A]): Show[Dual[A]] = dual => s"Dual(${ev.show(dual.getDual)})"
 }
 
 trait DualInstances0 {

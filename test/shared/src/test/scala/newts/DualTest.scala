@@ -1,5 +1,6 @@
 package newts
 
+import cats.Show
 import cats.data.NonEmptyList
 import cats.kernel.laws.{GroupLaws, OrderLaws}
 import cats.laws.discipline.arbitrary._
@@ -15,6 +16,15 @@ class DualTest extends NewtsSuite {
     val ys = NonEmptyList.of(3,4)
 
     xs.asDual |+| ys.asDual shouldEqual (ys |+| xs).asDual
+  }
+
+  test("show") {
+    class ShowTestClass
+    implicit val _: Show[ShowTestClass] = (_: ShowTestClass) => "test show"
+
+    Dual("aString").show shouldEqual "Dual(aString)"
+    Dual(42).show shouldEqual "Dual(42)"
+    Dual(new ShowTestClass).show shouldEqual "Dual(test show)"
   }
 
   test("dual of first is last"){
