@@ -6,8 +6,6 @@ class MultTest extends NewtsSuite {
 
   checkAll("Mult[Int]", GroupLaws[Mult[Int]].monoid)
   checkAll("Mult[Int]", OrderLaws[Mult[Int]].eqv)
-  checkAll("Mult[Long]", GroupLaws[Mult[Long]].monoid)
-  checkAll("Mult[Long]", OrderLaws[Mult[Long]].eqv)
 
   test("combine") {
     1L.asMult |+| 1L.asMult shouldEqual 1L.asMult
