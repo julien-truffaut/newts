@@ -30,6 +30,6 @@ object FirstOption {
   implicit def eqInstance[A: Eq]: Eq[FirstOption[A]] = Eq.by(_.getFirstOption)
 
   implicit def showInstance[A: Show]: Show[FirstOption[A]] = new Show[FirstOption[A]] {
-    override def show(f: FirstOption[A]): String = s"FirstOption(${implicitly[Show[Option[A]]].show(f.getFirstOption)})"
+    override def show(f: FirstOption[A]): String = s"FirstOption(${Show[Option[A]].show(f.getFirstOption)})"
   }
 }

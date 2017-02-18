@@ -14,6 +14,6 @@ object First {
   implicit def eqInstance[A: Eq]: Eq[First[A]] = Eq.by(_.getFirst)
 
   implicit def showIntance[A : Show]: Show[First[A]] = new Show[First[A]] {
-    override def show(f: First[A]): String = s"First(${implicitly[Show[A]].show(f.getFirst)})"
+    override def show(f: First[A]): String = s"First(${Show[A].show(f.getFirst)})"
   }
 }
