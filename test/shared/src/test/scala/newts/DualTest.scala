@@ -20,7 +20,9 @@ class DualTest extends NewtsSuite {
 
   test("show") {
     class ShowTestClass
-    implicit val _: Show[ShowTestClass] = (_: ShowTestClass) => "test show"
+    implicit val _: Show[ShowTestClass] = new Show[ShowTestClass] {
+      override def show(f: ShowTestClass): String = "test show"
+    }
 
     Dual("aString").show shouldEqual "Dual(aString)"
     Dual(42).show shouldEqual "Dual(42)"

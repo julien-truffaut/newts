@@ -18,7 +18,9 @@ class FirstTest extends NewtsSuite {
 
   test("show") {
     class ShowTestClass
-    implicit val _: Show[ShowTestClass] = (_: ShowTestClass) => "test show"
+    implicit val _: Show[ShowTestClass] = new Show[ShowTestClass] {
+      def show(f: ShowTestClass) = "test show"
+    }
 
     First("aString").show shouldEqual "First(aString)"
     First(42).show shouldEqual "First(42)"

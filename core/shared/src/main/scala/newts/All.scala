@@ -13,5 +13,7 @@ object All {
     def combine(x: All, y: All): All = All(x.getAll && y.getAll)
   }
 
-  implicit def showInstance: Show[All] = (all: All) => s"All(${implicitly[Show[Boolean]].show(all.getAll)})"
+  implicit def showInstance: Show[All] = new Show[All] {
+    override def show(all: All): String = s"All(${implicitly[Show[Boolean]].show(all.getAll)})"
+  }
 }

@@ -10,9 +10,11 @@ object Dual extends DualInstances0 {
     def combine(x: Dual[A], y: Dual[A]): Dual[A] = Dual(A.combine(y.getDual, x.getDual))
   }
 
-  implicit def dualEq[A: Eq]: Eq[Dual[A]] = Eq.by(_.getDual)
+  implicit def showInstances[A : Show]: Show[Dual[A]] = new Show[Dual[A]] {
+    override def show(dual: Dual[A]): String = s"Dual(${implicitly[Show[A]].show(dual.getDual)})"
+  }
 
-  implicit def dualInstances[A](implicit ev: Show[A]): Show[Dual[A]] = dual => s"Dual(${ev.show(dual.getDual)})"
+  implicit def dualEq[A: Eq]: Eq[Dual[A]] = Eq.by(_.getDual)
 }
 
 trait DualInstances0 {
