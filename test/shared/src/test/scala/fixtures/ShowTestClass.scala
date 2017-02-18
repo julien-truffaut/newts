@@ -11,4 +11,3 @@ object ShowTestClass {
     def show(f: ShowTestClass) = ShowTestClass.show
   }
 }
-
