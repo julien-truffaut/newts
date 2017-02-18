@@ -12,6 +12,9 @@ import newts.bench.shapeless.{ConjunctionS, conjunctionSMonoid}
 import newts.{All, Min, ZipList}
 import org.openjdk.jmh.annotations._
 
+@Warmup(iterations = 3, time = 1, timeUnit = TimeUnit.SECONDS)
+@Measurement(iterations = 3, time = 1, timeUnit = TimeUnit.SECONDS)
+@Fork(value = 3)
 @BenchmarkMode(Array(Mode.Throughput))
 @OutputTimeUnit(TimeUnit.MICROSECONDS)
 @State(Scope.Thread)
