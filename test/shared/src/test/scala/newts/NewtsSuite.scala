@@ -20,6 +20,7 @@ trait NewtsSuite extends FunSuite
 
 trait ArbitraryInstances {
   val allIso: Iso[Boolean, All] = Iso(All(_))(_.getAll)
+  def multIso[A]: Iso[A, Mult[A]] = Iso[A, Mult[A]](Mult(_))(_.getMult)
   def dualIso[A]: Iso[A, Dual[A]] = Iso[A, Dual[A]](Dual(_))(_.getDual)
   def firstIso[A]: Iso[A, First[A]] = Iso[A, First[A]](First(_))(_.getFirst)
   def firstOptionIso[A]: Iso[Option[A], FirstOption[A]] = Iso[Option[A], FirstOption[A]](FirstOption(_))(_.getFirstOption)
@@ -31,6 +32,7 @@ trait ArbitraryInstances {
   def cogenFromIso[A: Cogen, B](iso: Iso[A, B]): Cogen[B] = Cogen[A].contramap(iso.reverseGet)
 
   implicit val allArbitrary: Arbitrary[All] = arbFromIso(allIso)
+  implicit def multArbitrary[A:Arbitrary]: Arbitrary[Mult[A]] = arbFromIso(multIso)
   implicit def dualArbitrary[A: Arbitrary]: Arbitrary[Dual[A]] = arbFromIso(dualIso)
   implicit def firstArbitrary[A: Arbitrary]: Arbitrary[First[A]] = arbFromIso(firstIso)
   implicit def firstOptionArbitrary[A: Arbitrary]: Arbitrary[FirstOption[A]] = arbFromIso(firstOptionIso)
@@ -39,6 +41,7 @@ trait ArbitraryInstances {
   implicit def zipListArbitrary[A: Arbitrary]: Arbitrary[ZipList[A]] = arbFromIso(zipListIso)
 
   implicit val allCogen: Cogen[All] = cogenFromIso(allIso)
+  implicit def multCogen[A: Cogen]: Cogen[Mult[A]] = cogenFromIso(multIso)
   implicit def dualCogen[A: Cogen]: Cogen[Dual[A]] = cogenFromIso(dualIso)
   implicit def firstCogen[A: Cogen]: Cogen[First[A]] = cogenFromIso(firstIso)
   implicit def firstOptionCogen[A: Cogen]: Cogen[FirstOption[A]] = cogenFromIso(firstOptionIso)
