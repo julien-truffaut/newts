@@ -17,22 +17,22 @@ run benchmarks using: `sbt "bench/jmh:run -i 10 -wi 10 -f 2 -t 1"`
  
  
 ```
-Benchmark                Mode  Cnt    Score    Error   Units
-stdAllCombine1          thrpt   20  411.346 ±  6.424  ops/us
-anyvalAllCombine1       thrpt   20  318.740 ± 23.665  ops/us
-scalazAllCombine1       thrpt   20  209.799 ±  1.647  ops/us
-shapelessAllCombine1    thrpt   20  136.814 ±  0.873  ops/us
-stdAllCombineAll        thrpt   20    4.046 ±  0.046  ops/us
-anyvalAllCombineAll     thrpt   20    2.748 ±  0.029  ops/us
-scalazAllCombineAll     thrpt   20    3.648 ±  0.034  ops/us
-shapelessAllCombineAll  thrpt   20    2.429 ±  0.018  ops/us
+[info] Benchmark                             Mode  Cnt    Score   Error   Units
+[info] NewtypeBench.stdAllCombine1          thrpt   30  447.216 ± 7.115  ops/us
+[info] NewtypeBench.anyvalAllCombine1       thrpt   30  365.722 ± 8.268  ops/us
+[info] NewtypeBench.scalazAllCombine1       thrpt   30  223.240 ± 6.023  ops/us
+[info] NewtypeBench.shapelessAllCombine1    thrpt   30  147.103 ± 3.319  ops/us
+[info] NewtypeBench.stdAllCombineAll        thrpt   30    4.368 ± 0.099  ops/us
+[info] NewtypeBench.anyvalAllCombineAll     thrpt   30    2.880 ± 0.034  ops/us
+[info] NewtypeBench.scalazAllCombineAll     thrpt   30    3.977 ± 0.061  ops/us
+[info] NewtypeBench.shapelessAllCombineAll  thrpt   30    2.629 ± 0.044  ops/us
 ```
 
 
 `Min == (_ min _)`
 
 ```
-Benchmark                Mode  Cnt    Score    Error   Units
-stdIntMin               thrpt   20  101.116 ±  0.804  ops/us
-anyvalIntMin            thrpt   20   82.383 ±  1.288  ops/us
+[info] Benchmark                             Mode  Cnt    Score   Error   Units
+[info] NewtypeBench.anyvalIntMin            thrpt   30   90.782 ± 1.679  ops/us
+[info] NewtypeBench.stdIntMin               thrpt   30  107.441 ± 3.404  ops/us
 ```
