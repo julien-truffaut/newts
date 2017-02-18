@@ -14,4 +14,8 @@ class AllTest extends NewtsSuite {
     All(false)   |+| All(false) shouldEqual All(false)
   }
 
+  test("show") {
+    All(true).show shouldEqual "All(true)"
+    All(false).show shouldEqual "All(false)"
+  }
 }

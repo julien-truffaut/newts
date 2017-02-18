@@ -1,6 +1,6 @@
 package newts
 
-import cats.Monoid
+import cats.{Monoid, Show}
 import cats.kernel.Eq
 
 final case class All(getAll: Boolean) extends AnyVal
@@ -11,4 +11,6 @@ object All {
     val empty: All = All(true)
     def combine(x: All, y: All): All = All(x.getAll && y.getAll)
   }
+
+  implicit def showInstance: Show[All] = (all: All) => s"All(${all.getAll})"
 }

@@ -13,7 +13,7 @@ class FirstTest extends NewtsSuite {
     1.asFirst |+| 2.asFirst shouldEqual First(1)
   }
 
-  test("provides show instance") {
+  test("show") {
     First("aString").show shouldEqual "First(aString)"
     First(42).show shouldEqual "First(42)"
   }
