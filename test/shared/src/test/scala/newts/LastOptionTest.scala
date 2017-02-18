@@ -2,11 +2,11 @@ package newts
 
 import cats.Show
 import cats.kernel.laws.{GroupLaws, OrderLaws}
-import cats.laws.discipline.MonoidKTests
+import cats.laws.discipline.MonadCombineTests
 
 class LastOptionTest extends NewtsSuite {
 
-  checkAll("LastOption[Int]", MonoidKTests[LastOption].monoidK[Int])
+  checkAll("LastOption[Int]", MonadCombineTests[LastOption].monoidK[Int])
   checkAll("LastOption[Int]", GroupLaws[LastOption[Int]].monoid)
   checkAll("LastOption[Int]", OrderLaws[LastOption[Int]].eqv)
 
