@@ -5,6 +5,7 @@ import cats.kernel.laws.{GroupLaws, OrderLaws}
 class MinTest extends NewtsSuite {
 
   checkAll("Min[Int]", GroupLaws[Min[Int]].semigroup)
+  checkAll("Min[Int]", GroupLaws[Min[Int]].monoid)
   checkAll("Min[Int]", OrderLaws[Min[Int]].order)
 
   test("combine"){
