@@ -4,6 +4,7 @@ import cats.Show
 import cats.data.NonEmptyList
 import cats.kernel.laws.{GroupLaws, OrderLaws}
 import cats.laws.discipline.arbitrary._
+import fixtures.ShowTestClass
 
 class DualTest extends NewtsSuite {
 
@@ -19,14 +20,9 @@ class DualTest extends NewtsSuite {
   }
 
   test("show") {
-    class ShowTestClass
-    implicit val _: Show[ShowTestClass] = new Show[ShowTestClass] {
-      override def show(f: ShowTestClass): String = "test show"
-    }
-
     Dual("aString").show shouldEqual "Dual(aString)"
     Dual(42).show shouldEqual "Dual(42)"
-    Dual(new ShowTestClass).show shouldEqual "Dual(test show)"
+    Dual(new ShowTestClass).show shouldEqual s"Dual(${ShowTestClass.show})"
   }
 
   test("dual of first is last"){

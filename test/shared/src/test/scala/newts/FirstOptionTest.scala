@@ -3,6 +3,7 @@ package newts
 import cats.Show
 import cats.kernel.laws.{GroupLaws, OrderLaws}
 import cats.laws.discipline.MonadCombineTests
+import fixtures.ShowTestClass
 
 class FirstOptionTest extends NewtsSuite {
 
@@ -16,14 +17,9 @@ class FirstOptionTest extends NewtsSuite {
   }
 
   test("show") {
-    class ShowTestClass
-    implicit val _: Show[ShowTestClass] = new Show[ShowTestClass] {
-      def show(f: ShowTestClass) = "test show"
-    }
-
     FirstOption(Some("aString")).show shouldEqual "FirstOption(Some(aString))"
     FirstOption(Some(42)).show shouldEqual "FirstOption(Some(42))"
-    FirstOption(Some(new ShowTestClass())).show shouldEqual "FirstOption(Some(test show))"
+    FirstOption(Some(new ShowTestClass)).show shouldEqual s"FirstOption(Some(${ShowTestClass.show}))"
     FirstOption[Int](None).show shouldEqual "FirstOption(None)"
   }
 }
