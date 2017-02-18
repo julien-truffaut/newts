@@ -13,4 +13,8 @@ class MinTest extends NewtsSuite {
     1.asMin |+| 5.asMin shouldEqual Min(1)
   }
 
+  test("show") {
+    Min(5).show shouldEqual "Min(5)"
+    Min("1").show shouldEqual "Min(1)"
+  }
 }
