@@ -5,7 +5,6 @@ import cats.kernel.laws.{GroupLaws, OrderLaws}
 import cats.laws.discipline.SemigroupKTests
 import fixtures.ShowTestClass
 
-
 class FirstTest extends NewtsSuite {
 
   checkAll("First[Int]", SemigroupKTests[First].semigroupK[Int])
