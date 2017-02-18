@@ -29,4 +29,5 @@ final class ValueOps[A](val self: A) extends AnyVal {
   def asDual: Dual[A] = Dual(self)
   def asFirst: First[A] = First(self)
   def asMin: Min[A] = Min(self)
+  def asMult: Mult[A] = Mult(self)
 }
