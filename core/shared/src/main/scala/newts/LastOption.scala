@@ -1,15 +1,26 @@
 package newts
 
-import cats.{Monoid, MonoidK, Show}
+import cats.{MonadCombine, Monoid, MonoidK, Show}
 import cats.instances.option._
 import cats.kernel.Eq
 
 final case class LastOption[A](getLastOption: Option[A]) extends AnyVal
 
 object LastOption {
-  implicit val monoidKInstance: MonoidK[LastOption] = new MonoidK[LastOption] {
-    def empty[A]: LastOption[A] = LastOption(None)
-    def combineK[A](x: LastOption[A], y: LastOption[A]): LastOption[A] = LastOption(y.getLastOption.orElse(x.getLastOption))
+  implicit val monadCombineInstance: MonadCombine[LastOption] = new MonadCombine[LastOption] {
+    override def empty[A]: LastOption[A] = LastOption(None)
+    override def combineK[A](x: LastOption[A], y: LastOption[A]): LastOption[A] = LastOption(y.getLastOption.orElse(x.getLastOption))
+    override def pure[A](x: A): LastOption[A] = LastOption(Some(x))
+    override def flatMap[A, B](fa: LastOption[A])(f: (A) => LastOption[B]): LastOption[B] =
+      fa.getLastOption.fold(empty[B])(f)
+
+    override def tailRecM[A, B](a: A)(f: (A) => LastOption[Either[A, B]]): LastOption[B] = {
+      f(a).getLastOption match {
+        case None => empty
+        case Some(Left(a1)) => tailRecM(a1)(f)
+        case Some(Right(b)) => pure(b)
+      }
+    }
   }
 
   implicit def monoidInstance[A]: Monoid[LastOption[A]] = MonoidK[LastOption].algebra
