@@ -1,6 +1,6 @@
 package newts
 
-import cats.{Monoid, MonoidK}
+import cats.{Monoid, MonoidK, Show}
 import cats.instances.option._
 import cats.kernel.Eq
 
@@ -15,4 +15,8 @@ object LastOption {
   implicit def monoidInstance[A]: Monoid[LastOption[A]] = MonoidK[LastOption].algebra
 
   implicit def eqInstance[A: Eq]: Eq[LastOption[A]] = Eq.by(_.getLastOption)
+
+  implicit def showInstance[A](implicit ev: Show[Option[A]]): Show[LastOption[A]] = new Show[LastOption[A]] {
+    override def show(f: LastOption[A]): String =  s"LastOption(${ev.show(f.getLastOption)})"
+  }
 }

@@ -1,6 +1,6 @@
 package newts
 
-import cats.Apply
+import cats.{Apply, Show}
 import cats.instances.list._
 import cats.kernel.Eq
 
@@ -20,4 +20,8 @@ object ZipList {
   }
 
   implicit def eqInstances[A: Eq]: Eq[ZipList[A]] = Eq.by(_.getZipList)
+
+  implicit def showInstance[A](implicit ev: Show[List[A]]): Show[ZipList[A]] = new Show[ZipList[A]]{
+    override def show(f: ZipList[A]): String =  s"ZipList(${ev.show(f.getZipList)})"
+  }
 }
