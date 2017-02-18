@@ -1,7 +1,9 @@
 package newts
 
+import cats.Show
 import cats.kernel.laws.{GroupLaws, OrderLaws}
 import cats.laws.discipline.MonadCombineTests
+import fixtures.ShowTestClass
 
 class FirstOptionTest extends NewtsSuite {
 
@@ -14,4 +16,10 @@ class FirstOptionTest extends NewtsSuite {
     none[Int].asFirstOption |+| 2.some.asFirstOption shouldEqual FirstOption(Some(2))
   }
 
+  test("show") {
+    FirstOption(Some("aString")).show shouldEqual "FirstOption(Some(aString))"
+    FirstOption(Some(42)).show shouldEqual "FirstOption(Some(42))"
+    FirstOption(Some(new ShowTestClass)).show shouldEqual s"FirstOption(Some(${ShowTestClass.show}))"
+    FirstOption[Int](None).show shouldEqual "FirstOption(None)"
+  }
 }
