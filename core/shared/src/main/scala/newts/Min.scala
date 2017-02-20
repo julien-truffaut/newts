@@ -20,7 +20,7 @@ object Min extends MinInstances0{
 }
 
 trait MinInstances0{
-  implicit def minMonoid[A: MaxBounded]: Monoid[Min[A]] = new Monoid[Min[A]]{
+  implicit def minMonoid[A](implicit A: MaxBounded[A]): Monoid[Min[A]] = new Monoid[Min[A]]{
     def empty: Min[A] = Min(MaxBounded[A].maxValue)
     def combine(x: Min[A], y: Min[A]): Min[A] = Min(x.getMin min y.getMin)
   }

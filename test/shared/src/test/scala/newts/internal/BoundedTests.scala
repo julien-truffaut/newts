@@ -9,10 +9,16 @@ import org.scalacheck.{Arbitrary, Cogen}
 import org.scalacheck.Prop.forAll
 
 trait BoundedTests[A] extends OrderLaws[A] {
-  def minBounded(implicit minBounded: MaxBounded[A]): RuleSet = new OrderProperties(
+  def maxBounded(implicit maxBounded: MaxBounded[A]): RuleSet = new OrderProperties(
     name = "MaxBounded",
     parent = Some(order),
-    "maxValue is the maximum" -> forAll((a: A) => (MaxBounded[A].maxValue max a) <-> MaxBounded[A].maxValue)
+    "maxValue is the maximum" -> forAll((a: A) => (maxBounded.maxValue max a) <-> maxBounded.maxValue)
+  )
+
+  def minBounded(implicit minBounded: MinBounded[A]): RuleSet = new OrderProperties(
+    name = "MaxBounded",
+    parent = Some(order),
+    "minValue is the minimum" -> forAll((a: A) => (minBounded.minValue min a) <-> minBounded.minValue)
   )
 }
 

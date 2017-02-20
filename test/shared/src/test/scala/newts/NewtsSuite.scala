@@ -26,6 +26,7 @@ trait ArbitraryInstances {
   def firstOptionIso[A]: Iso[Option[A], FirstOption[A]] = Iso[Option[A], FirstOption[A]](FirstOption(_))(_.getFirstOption)
   def lastOptionIso[A]: Iso[Option[A], LastOption[A]] = Iso[Option[A], LastOption[A]](LastOption(_))(_.getLastOption)
   def minIso[A]: Iso[A, Min[A]] = Iso[A, Min[A]](Min(_))(_.getMin)
+  def maxIso[A]: Iso[A, Max[A]] = Iso[A, Max[A]](Max(_))(_.getMax)
   def zipListIso[A]: Iso[List[A], ZipList[A]] = Iso[List[A], ZipList[A]](ZipList(_))(_.getZipList)
 
   def arbFromIso[A: Arbitrary, B](iso: Iso[A, B]): Arbitrary[B] = Arbitrary(arbitrary[A].map(iso.get))
@@ -38,6 +39,7 @@ trait ArbitraryInstances {
   implicit def firstOptionArbitrary[A: Arbitrary]: Arbitrary[FirstOption[A]] = arbFromIso(firstOptionIso)
   implicit def lastOptionArbitrary[A: Arbitrary]: Arbitrary[LastOption[A]]  = arbFromIso(lastOptionIso)
   implicit def minArbitrary[A: Arbitrary]: Arbitrary[Min[A]]  = arbFromIso(minIso)
+  implicit def maxArbitrary[A: Arbitrary]: Arbitrary[Max[A]]  = arbFromIso(maxIso)
   implicit def zipListArbitrary[A: Arbitrary]: Arbitrary[ZipList[A]] = arbFromIso(zipListIso)
 
   implicit val allCogen: Cogen[All] = cogenFromIso(allIso)
@@ -47,5 +49,6 @@ trait ArbitraryInstances {
   implicit def firstOptionCogen[A: Cogen]: Cogen[FirstOption[A]] = cogenFromIso(firstOptionIso)
   implicit def lastOptionCogen[A: Cogen] : Cogen[LastOption[A]]  = cogenFromIso(lastOptionIso)
   implicit def minOptionCogen[A: Cogen] : Cogen[Min[A]]  = cogenFromIso(minIso)
+  implicit def maxOptionCogen[A: Cogen] : Cogen[Max[A]]  = cogenFromIso(maxIso)
   implicit def zipListCogen[A: Cogen]: Cogen[ZipList[A]] = cogenFromIso(zipListIso)
 }

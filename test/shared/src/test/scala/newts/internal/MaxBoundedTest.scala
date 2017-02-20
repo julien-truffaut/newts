@@ -4,8 +4,8 @@ import newts.NewtsSuite
 
 class MaxBoundedTest extends NewtsSuite {
 
-  checkAll("Short", BoundedTests[Int].minBounded)
-  checkAll("Int", BoundedTests[Int].minBounded)
-  checkAll("Long", BoundedTests[Int].minBounded)
+  checkAll("Short", BoundedTests[Short].maxBounded)
+  checkAll("Int", BoundedTests[Int].maxBounded)
+  checkAll("Long", BoundedTests[Long].maxBounded)
 
 }
