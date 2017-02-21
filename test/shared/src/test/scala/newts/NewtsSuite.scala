@@ -19,7 +19,7 @@ trait NewtsSuite extends FunSuite
   with ArbitraryInstances
 
 trait ArbitraryInstances {
-  val allIso: Iso[Boolean, All] = Iso(All(_))(_.getAll)
+  val allIso: Iso[Boolean, All] = Iso[Boolean, All](All(_))(_.getAll)
   def multIso[A]: Iso[A, Mult[A]] = Iso[A, Mult[A]](Mult(_))(_.getMult)
   def dualIso[A]: Iso[A, Dual[A]] = Iso[A, Dual[A]](Dual(_))(_.getDual)
   def firstIso[A]: Iso[A, First[A]] = Iso[A, First[A]](First(_))(_.getFirst)
