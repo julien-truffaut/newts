@@ -59,6 +59,7 @@ import newts._
 ints.foldMap(i => LastOption(Some(i)))
 intNel.reduceMap(First(_))
 intNel.reduceMap(Min(_))
+intNel.reduceMap(Max(_))
 strings.foldMap(Dual(_))
 ```
 
