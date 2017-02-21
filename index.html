@@ -62,8 +62,11 @@ type for each other implementation. This pattern is called newtype and it comes 
 <span class="n">scala</span><span class="o">&gt;</span> <span class="n">intNel</span><span class="o">.</span><span class="n">reduceMap</span><span class="o">(</span><span class="nc">Min</span><span class="o">(</span><span class="k">_</span><span class="o">))</span>
 <span class="n">res9</span><span class="k">:</span> <span class="kt">newts.Min</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Min</span><span class="o">(</span><span class="mi">1</span><span class="o">)</span>
 
+<span class="n">scala</span><span class="o">&gt;</span> <span class="n">intNel</span><span class="o">.</span><span class="n">reduceMap</span><span class="o">(</span><span class="nc">Max</span><span class="o">(</span><span class="k">_</span><span class="o">))</span>
+<span class="n">res10</span><span class="k">:</span> <span class="kt">newts.Max</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Max</span><span class="o">(</span><span class="mi">100</span><span class="o">)</span>
+
 <span class="n">scala</span><span class="o">&gt;</span> <span class="n">strings</span><span class="o">.</span><span class="n">foldMap</span><span class="o">(</span><span class="nc">Dual</span><span class="o">(</span><span class="k">_</span><span class="o">))</span>
-<span class="n">res10</span><span class="k">:</span> <span class="kt">newts.Dual</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Dual</span><span class="o">(</span><span class="n">fghcdeabc</span><span class="o">)</span>
+<span class="n">res11</span><span class="k">:</span> <span class="kt">newts.Dual</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Dual</span><span class="o">(</span><span class="n">fghcdeabc</span><span class="o">)</span>
 </code></pre>
 </div>
 
@@ -75,10 +78,10 @@ type for each other implementation. This pattern is called newtype and it comes 
 </div>
 
 <div class="highlighter-rouge"><pre class="highlight"><code><span class="n">scala</span><span class="o">&gt;</span> <span class="n">strings</span><span class="o">.</span><span class="n">foldMap</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">asDual</span><span class="o">)</span>
-<span class="n">res11</span><span class="k">:</span> <span class="kt">newts.Dual</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Dual</span><span class="o">(</span><span class="n">fghcdeabc</span><span class="o">)</span>
+<span class="n">res12</span><span class="k">:</span> <span class="kt">newts.Dual</span><span class="o">[</span><span class="kt">String</span><span class="o">]</span> <span class="k">=</span> <span class="nc">Dual</span><span class="o">(</span><span class="n">fghcdeabc</span><span class="o">)</span>
 
 <span class="n">scala</span><span class="o">&gt;</span> <span class="n">ints</span><span class="o">.</span><span class="n">foldMap</span><span class="o">(</span><span class="k">_</span><span class="o">.</span><span class="n">some</span><span class="o">.</span><span class="n">asLastOption</span><span class="o">)</span>
-<span class="n">res12</span><span class="k">:</span> <span class="kt">newts.LastOption</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">LastOption</span><span class="o">(</span><span class="nc">Some</span><span class="o">(</span><span class="mi">100</span><span class="o">))</span>
+<span class="n">res13</span><span class="k">:</span> <span class="kt">newts.LastOption</span><span class="o">[</span><span class="kt">Int</span><span class="o">]</span> <span class="k">=</span> <span class="nc">LastOption</span><span class="o">(</span><span class="nc">Some</span><span class="o">(</span><span class="mi">100</span><span class="o">))</span>
 </code></pre>
 </div>
 
