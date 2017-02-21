@@ -2,7 +2,7 @@ package newts
 
 import cats.Show
 import cats.kernel.laws.{GroupLaws, OrderLaws}
-import cats.laws.discipline.SemigroupKTests
+import cats.laws.discipline.{MonadTests, SemigroupKTests}
 import fixtures.ShowTestClass
 
 class FirstTest extends NewtsSuite {
@@ -10,6 +10,7 @@ class FirstTest extends NewtsSuite {
   checkAll("First[Int]", SemigroupKTests[First].semigroupK[Int])
   checkAll("First[Int]", GroupLaws[First[Int]].semigroup)
   checkAll("First[Int]", OrderLaws[First[Int]].eqv)
+  checkAll("First[Int]", MonadTests[First].monad[Int, Int, Int])
 
   test("combine"){
     1.asFirst |+| 2.asFirst shouldEqual First(1)

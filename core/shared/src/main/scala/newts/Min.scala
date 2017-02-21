@@ -1,14 +1,25 @@
 package newts
 
-import cats.{Monoid, Semigroup}
-import cats.{Semigroup, Show}
 import cats.kernel.Order
 import cats.syntax.order._
+import cats.{Monad, Monoid, Semigroup, Show}
 import newts.internal.MaxBounded
+
+import scala.annotation.tailrec
 
 final case class Min[A](getMin: A) extends AnyVal
 
 object Min extends MinInstances0{
+  implicit val monadInstance: Monad[Min] = new Monad[Min] {
+    def pure[A](x: A): Min[A] = Min(x)
+    def flatMap[A, B](fa: Min[A])(f: A => Min[B]): Min[B] = f(fa.getMin)
+    @tailrec
+    def tailRecM[A, B](a: A)(f: A => Min[Either[A, B]]): Min[B] = f(a) match {
+      case Min(Left(a1)) => tailRecM(a1)(f)
+      case Min(Right(b)) => Min(b)
+    }
+  }
+  
   implicit def instances[A: Order]: Order[Min[A]] with Semigroup[Min[A]] = new Order[Min[A]] with Semigroup[Min[A]] {
     def combine(x: Min[A], y: Min[A]): Min[A] = Min(x.getMin min y.getMin)
     def compare(x: Min[A], y: Min[A]): Int = x.getMin compare y.getMin

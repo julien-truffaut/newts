@@ -1,8 +1,8 @@
 package newts
 
-import cats.Show
 import cats.data.NonEmptyList
 import cats.kernel.laws.{GroupLaws, OrderLaws}
+import cats.laws.discipline.MonadTests
 import cats.laws.discipline.arbitrary._
 import fixtures.ShowTestClass
 
@@ -11,6 +11,7 @@ class DualTest extends NewtsSuite {
   checkAll("Dual[NonEmptyList[Int]]", GroupLaws[Dual[NonEmptyList[Int]]].semigroup)
   checkAll("Dual[List[Int]]"        , GroupLaws[Dual[List[Int]]].monoid)
   checkAll("Dual[Int]"              , OrderLaws[Dual[Int]].eqv)
+  checkAll("Dual[Int]"              , MonadTests[Dual].monad[Int, Int, Int])
 
   test("combine"){
     val xs = NonEmptyList.of(1,2)
