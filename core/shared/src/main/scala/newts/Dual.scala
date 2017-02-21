@@ -1,7 +1,8 @@
 package newts
 
-import cats.{Monad, Monoid, Semigroup, Show}
 import cats.kernel.Eq
+import cats.syntax.functor._
+import cats.{Applicative, Eval, Monad, Monoid, Semigroup, Show, Traverse}
 
 import scala.annotation.tailrec
 
@@ -33,5 +34,16 @@ trait DualInstances0 {
   implicit def monoidInstances[A](implicit A: Monoid[A]): Monoid[Dual[A]] = new Monoid[Dual[A]]{
     def empty: Dual[A] = Dual(A.empty)
     def combine(x: Dual[A], y: Dual[A]): Dual[A] = Dual(A.combine(y.getDual, x.getDual))
+  }
+
+  implicit val traverseInstance: Traverse[Dual] = new Traverse[Dual] {
+    def traverse[G[_], A, B](fa: Dual[A])(f: A => G[B])(implicit ev: Applicative[G]): G[Dual[B]] =
+      f(fa.getDual).map(Dual(_))
+
+    def foldLeft[A, B](fa: Dual[A], b: B)(f: (B, A) => B): B =
+      f(b, fa.getDual)
+
+    def foldRight[A, B](fa: Dual[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
+      f(fa.getDual, lb)
   }
 }

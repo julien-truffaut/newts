@@ -1,12 +1,13 @@
 package newts
 
-import cats.{Eq, Monad, Semigroup, SemigroupK, Show}
+import cats.{Applicative, Eq, Eval, Monad, Semigroup, SemigroupK, Show, Traverse}
+import cats.syntax.functor._
 
 import scala.annotation.tailrec
 
 final case class First[A](getFirst: A) extends AnyVal
 
-object First {
+object First extends FirstInstances0 {
   implicit val monadInstance: Monad[First] = new Monad[First] {
     def pure[A](x: A): First[A] = First(x)
     def flatMap[A, B](fa: First[A])(f: A => First[B]): First[B] = f(fa.getFirst)
@@ -27,5 +28,18 @@ object First {
 
   implicit def showIntance[A : Show]: Show[First[A]] = new Show[First[A]] {
     override def show(f: First[A]): String = s"First(${Show[A].show(f.getFirst)})"
+  }
+}
+
+trait FirstInstances0 {
+  implicit val traverseInstance: Traverse[First] = new Traverse[First] {
+    def traverse[G[_], A, B](fa: First[A])(f: A => G[B])(implicit ev: Applicative[G]): G[First[B]] =
+      f(fa.getFirst).map(First(_))
+
+    def foldLeft[A, B](fa: First[A], b: B)(f: (B, A) => B): B =
+      f(b, fa.getFirst)
+
+    def foldRight[A, B](fa: First[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
+      f(fa.getFirst, lb)
   }
 }

@@ -1,8 +1,7 @@
 package newts
 
-import cats.Show
 import cats.kernel.laws.{GroupLaws, OrderLaws}
-import cats.laws.discipline.MonadCombineTests
+import cats.laws.discipline.{MonadCombineTests, TraverseTests}
 import fixtures.ShowTestClass
 
 class FirstOptionTest extends NewtsSuite {
@@ -10,6 +9,7 @@ class FirstOptionTest extends NewtsSuite {
   checkAll("FirstOption[Int]", MonadCombineTests[FirstOption].monoidK[Int])
   checkAll("FirstOption[Int]", GroupLaws[FirstOption[Int]].monoid)
   checkAll("FirstOption[Int]", OrderLaws[FirstOption[Int]].eqv)
+  checkAll("FirstOption[Int]", TraverseTests[FirstOption].traverse[Int, Int, Int, Int, Option, Option])
 
   test("combine"){
     1.some.asFirstOption    |+| 2.some.asFirstOption shouldEqual FirstOption(Some(1))

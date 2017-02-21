@@ -1,14 +1,16 @@
 package newts
 
-import cats.{MonadCombine, Monoid, MonoidK, Show}
+import cats.{Applicative, Eval, MonadCombine, Monoid, MonoidK, Show, Traverse}
 import cats.instances.option._
+import cats.syntax.functor._
+import cats.syntax.traverse._
 import cats.kernel.Eq
 
 import scala.annotation.tailrec
 
 final case class FirstOption[A](getFirstOption: Option[A]) extends AnyVal
 
-object FirstOption {
+object FirstOption extends FirstOptionInstances0 {
   implicit val monadCombineInstance: MonadCombine[FirstOption] = new MonadCombine[FirstOption] {
     def empty[A]: FirstOption[A] = FirstOption(None)
     def combineK[A](x: FirstOption[A], y: FirstOption[A]): FirstOption[A] = FirstOption(x.getFirstOption.orElse(y.getFirstOption))
@@ -31,5 +33,18 @@ object FirstOption {
 
   implicit def showInstance[A: Show]: Show[FirstOption[A]] = new Show[FirstOption[A]] {
     override def show(f: FirstOption[A]): String = s"FirstOption(${Show[Option[A]].show(f.getFirstOption)})"
+  }
+}
+
+trait FirstOptionInstances0 {
+  implicit val traverseInstance: Traverse[FirstOption] = new Traverse[FirstOption] {
+    def traverse[G[_], A, B](fa: FirstOption[A])(f: A => G[B])(implicit ev: Applicative[G]): G[FirstOption[B]] =
+      fa.getFirstOption.traverse(f).map(FirstOption(_))
+
+    def foldLeft[A, B](fa: FirstOption[A], b: B)(f: (B, A) => B): B =
+      fa.getFirstOption.fold(b)(f(b, _))
+
+    def foldRight[A, B](fa: FirstOption[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
+      fa.getFirstOption.fold(lb)(f(_, lb))
   }
 }
