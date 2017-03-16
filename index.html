@@ -2,6 +2,12 @@
 
 <p>Newts defines newtypes compatible with <a href="https://github.com/typelevel/cats">cats</a> typeclasses.</p>
 
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="n">libraryDependencies</span> <span class="o">++=</span> <span class="nc">Seq</span><span class="o">(</span>
+  <span class="s">"com.github.julien-truffaut"</span> <span class="o">%%</span>  <span class="s">"newts-core"</span>  <span class="o">%</span> <span class="s">"0.1.0"</span>
+<span class="o">)</span>
+</code></pre>
+</div>
+
 <h2 id="example">Example</h2>
 
 <p>Using <code class="highlighter-rouge">cats</code> you can squash values using <code class="highlighter-rouge">Monoid</code> or <code class="highlighter-rouge">Semigroup</code> instance (based on if your data structure can be empty):</p>
