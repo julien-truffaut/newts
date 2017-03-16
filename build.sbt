@@ -36,7 +36,6 @@ lazy val cats      = Def.setting("org.typelevel"   %%% "cats"       % "0.9.0")
 lazy val catsLaws  = Def.setting("org.typelevel"   %%% "cats-laws"  % "0.9.0")
 
 lazy val scalatest = Def.setting("org.scalatest"                %%% "scalatest"     % "3.0.1"  % "test")
-lazy val monocle   = Def.setting("com.github.julien-truffaut"   %%% "monocle-core"  % "1.4.0"  % "test")
 
 lazy val kindProjector  = "org.spire-math"  % "kind-projector" % "0.9.3" cross CrossVersion.binary
 
@@ -98,7 +97,7 @@ lazy val test    = crossProject.dependsOn(core)
   .settings(moduleName := "newts-test")
   .configureCross(newtsCrossSettings)
   .settings(noPublishSettings: _*)
-  .settings(libraryDependencies ++= Seq(cats.value, catsLaws.value, scalatest.value, monocle.value))
+  .settings(libraryDependencies ++= Seq(cats.value, catsLaws.value, scalatest.value))
 
 lazy val bench = project.dependsOn(coreJVM)
   .settings(moduleName := "newts-bench")

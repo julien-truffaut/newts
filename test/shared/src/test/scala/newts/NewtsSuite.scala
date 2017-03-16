@@ -7,7 +7,6 @@ import org.scalacheck.Arbitrary.arbitrary
 import org.scalatest.prop.GeneratorDrivenPropertyChecks
 import org.scalatest.{FunSuite, Matchers}
 import org.typelevel.discipline.scalatest.Discipline
-import monocle.Iso
 
 trait NewtsSuite extends FunSuite
   with Matchers
@@ -19,20 +18,21 @@ trait NewtsSuite extends FunSuite
   with ArbitraryInstances
 
 trait ArbitraryInstances {
-  val allIso: Iso[Boolean, All] = Iso[Boolean, All](All(_))(_.getAll)
-  val anyIso: Iso[Boolean, Any] = Iso[Boolean, Any](Any(_))(_.getAny)
-  def multIso[A]: Iso[A, Mult[A]] = Iso[A, Mult[A]](Mult(_))(_.getMult)
-  def dualIso[A]: Iso[A, Dual[A]] = Iso[A, Dual[A]](Dual(_))(_.getDual)
-  def firstIso[A]: Iso[A, First[A]] = Iso[A, First[A]](First(_))(_.getFirst)
-  def lastIso[A]: Iso[A, Last[A]] = Iso[A, Last[A]](Last(_))(_.getLast)
-  def firstOptionIso[A]: Iso[Option[A], FirstOption[A]] = Iso[Option[A], FirstOption[A]](FirstOption(_))(_.getFirstOption)
-  def lastOptionIso[A]: Iso[Option[A], LastOption[A]] = Iso[Option[A], LastOption[A]](LastOption(_))(_.getLastOption)
-  def minIso[A]: Iso[A, Min[A]] = Iso[A, Min[A]](Min(_))(_.getMin)
-  def maxIso[A]: Iso[A, Max[A]] = Iso[A, Max[A]](Max(_))(_.getMax)
-  def zipListIso[A]: Iso[List[A], ZipList[A]] = Iso[List[A], ZipList[A]](ZipList(_))(_.getZipList)
+  case class Iso[S, A](get: S => A, reGet: A => S)
+  val allIso: Iso[Boolean, All] = Iso[Boolean, All](All(_), _.getAll)
+  val anyIso: Iso[Boolean, Any] = Iso[Boolean, Any](Any(_), _.getAny)
+  def multIso[A]: Iso[A, Mult[A]] = Iso[A, Mult[A]](Mult(_), _.getMult)
+  def dualIso[A]: Iso[A, Dual[A]] = Iso[A, Dual[A]](Dual(_), _.getDual)
+  def firstIso[A]: Iso[A, First[A]] = Iso[A, First[A]](First(_), _.getFirst)
+  def lastIso[A]: Iso[A, Last[A]] = Iso[A, Last[A]](Last(_), _.getLast)
+  def firstOptionIso[A]: Iso[Option[A], FirstOption[A]] = Iso[Option[A], FirstOption[A]](FirstOption(_), _.getFirstOption)
+  def lastOptionIso[A]: Iso[Option[A], LastOption[A]] = Iso[Option[A], LastOption[A]](LastOption(_), _.getLastOption)
+  def minIso[A]: Iso[A, Min[A]] = Iso[A, Min[A]](Min(_), _.getMin)
+  def maxIso[A]: Iso[A, Max[A]] = Iso[A, Max[A]](Max(_), _.getMax)
+  def zipListIso[A]: Iso[List[A], ZipList[A]] = Iso[List[A], ZipList[A]](ZipList(_), _.getZipList)
 
   def arbFromIso[A: Arbitrary, B](iso: Iso[A, B]): Arbitrary[B] = Arbitrary(arbitrary[A].map(iso.get))
-  def cogenFromIso[A: Cogen, B](iso: Iso[A, B]): Cogen[B] = Cogen[A].contramap(iso.reverseGet)
+  def cogenFromIso[A: Cogen, B](iso: Iso[A, B]): Cogen[B] = Cogen[A].contramap(iso.reGet)
 
   implicit val allArbitrary: Arbitrary[All] = arbFromIso(allIso)
   implicit val anyArbitrary: Arbitrary[Any] = arbFromIso(anyIso)
