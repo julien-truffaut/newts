@@ -9,6 +9,12 @@ position: 1
 
 Newts defines newtypes compatible with [cats](https://github.com/typelevel/cats) typeclasses. 
 
+```scala
+libraryDependencies ++= Seq(
+  "com.github.julien-truffaut" %%  "newts-core"  % "0.1.0"
+)
+```
+
 ## Example
 
 Using `cats` you can squash values using `Monoid` or `Semigroup` instance (based on if your data structure can be empty):
