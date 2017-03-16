@@ -13,6 +13,7 @@ trait AllSyntax {
 
 final class BooleanOps(val self: Boolean) extends AnyVal {
   def asAll: All = All(self)
+  def asAny: Any = Any(self)
 }
 
 final class ListOps[A](val self: List[A]) extends AnyVal {

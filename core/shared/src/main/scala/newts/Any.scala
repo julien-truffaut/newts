@@ -1,0 +1,19 @@
+package newts
+
+import cats.instances.boolean._
+import cats.kernel.Eq
+import cats.{Monoid, Show}
+
+final case class Any(getAny: Boolean) extends AnyVal
+
+object Any {
+  implicit val monoidInstance: Monoid[Any] with Eq[Any] = new Monoid[Any] with Eq[Any]{
+    def eqv(x: Any, y: Any): Boolean = x == y
+    val empty: Any = Any(false)
+    def combine(x: Any, y: Any): Any = Any(x.getAny || y.getAny)
+  }
+
+  implicit def showInstance: Show[Any] = new Show[Any] {
+    def show(any: Any): String = s"Any(${Show[Boolean].show(any.getAny)})"
+  }
+}

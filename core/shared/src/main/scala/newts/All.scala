@@ -1,8 +1,8 @@
 package newts
 
-import cats.{Monoid, Show}
+import cats.instances.boolean._
 import cats.kernel.Eq
-import cats.implicits._
+import cats.{Monoid, Show}
 
 final case class All(getAll: Boolean) extends AnyVal
 
