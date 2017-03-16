@@ -6,12 +6,14 @@ position: 1
 ---
 
 [![Build Status](https://travis-ci.org/julien-truffaut/newts.svg?branch=master)](https://travis-ci.org/julien-truffaut/newts)
+[![Maven Central](https://img.shields.io/maven-central/v/com.github.julien-truffaut/newts_2.12.svg)](http://search.maven.org/#search|ga|1|com.github.julien-truffaut.newts)
+
 
 Newts defines newtypes compatible with [cats](https://github.com/typelevel/cats) typeclasses. 
 
 ```scala
 libraryDependencies ++= Seq(
-  "com.github.julien-truffaut" %%  "newts-core"  % "0.1.0"
+  "com.github.julien-truffaut" %%  "newts-core"  % "0.1.1"
 )
 ```
 
