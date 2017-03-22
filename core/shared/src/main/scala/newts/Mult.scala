@@ -9,6 +9,8 @@ import scala.annotation.tailrec
 final case class Mult[A](getMult: A) extends AnyVal
 
 object Mult extends MultInstances0 {
+  implicit def newtypeInstance[A]: Newtype[Mult[A], A] = Newtype.from[Mult[A], A](Mult.apply)(_.getMult)
+
   implicit val monadInstance: Monad[Mult] = new Monad[Mult] {
     def pure[A](x: A): Mult[A] = Mult(x)
     def flatMap[A, B](fa: Mult[A])(f: A => Mult[B]): Mult[B] = f(fa.getMult)

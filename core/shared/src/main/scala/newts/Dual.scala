@@ -9,6 +9,8 @@ import scala.annotation.tailrec
 final case class Dual[A](getDual: A) extends AnyVal
 
 object Dual extends DualInstances0 {
+  implicit def newtypeInstance[A]: Newtype[Dual[A], A] = Newtype.from[Dual[A], A](Dual.apply)(_.getDual)
+
   implicit val monadInstance: Monad[Dual] = new Monad[Dual] {
     def pure[A](x: A): Dual[A] = Dual(x)
     def flatMap[A, B](fa: Dual[A])(f: A => Dual[B]): Dual[B] = f(fa.getDual)

@@ -8,6 +8,8 @@ import scala.annotation.tailrec
 final case class First[A](getFirst: A) extends AnyVal
 
 object First extends FirstInstances0 {
+  implicit def newtypeInstance[A]: Newtype[First[A], A] = Newtype.from[First[A], A](First.apply)(_.getFirst)
+
   implicit val monadInstance: Monad[First] = new Monad[First] {
     def pure[A](x: A): First[A] = First(x)
     def flatMap[A, B](fa: First[A])(f: A => First[B]): First[B] = f(fa.getFirst)

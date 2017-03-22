@@ -8,6 +8,8 @@ import scala.annotation.tailrec
 final case class Last[A](getLast: A) extends AnyVal
 
 object Last extends LastInstances0 {
+  implicit def newtypeInstance[A]: Newtype[Last[A], A] = Newtype.from[Last[A], A](Last.apply)(_.getLast)
+
   implicit val monadInstance: Monad[Last] = new Monad[Last] {
     def pure[A](x: A): Last[A] = Last(x)
     def flatMap[A, B](fa: Last[A])(f: A => Last[B]): Last[B] = f(fa.getLast)
