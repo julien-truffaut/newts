@@ -18,10 +18,10 @@ trait NewtsSuite extends FunSuite
   with ArbitraryInstances
 
 trait ArbitraryInstances {
-  def arbNewtype[S, A: Arbitrary](implicit newtype: Newtype[S, A]): Arbitrary[S] =
+  def arbNewtype[S, A: Arbitrary](implicit newtype: Newtype.Aux[S, A]): Arbitrary[S] =
     Arbitrary(arbitrary[A].map(newtype.wrap))
 
-  def cogenNewtype[S, A: Cogen](implicit newtype: Newtype[S, A]): Cogen[S] =
+  def cogenNewtype[S, A: Cogen](implicit newtype: Newtype.Aux[S, A]): Cogen[S] =
     Cogen[A].contramap(newtype.unwrap)
 
   implicit val allArbitrary: Arbitrary[All] = arbNewtype[All, Boolean]

@@ -11,7 +11,7 @@ import scala.annotation.tailrec
 final case class Max[A](getMax: A) extends AnyVal
 
 object Max extends MaxInstances0{
-  implicit def newtypeInstance[A]: Newtype[Max[A], A] = Newtype.from[Max[A], A](Max.apply)(_.getMax)
+  implicit def newtypeInstance[A]: Newtype.Aux[Max[A], A] = Newtype.from[Max[A], A](Max.apply)(_.getMax)
 
   implicit val monadInstance: Monad[Max] = new Monad[Max] {
     def pure[A](x: A): Max[A] = Max(x)

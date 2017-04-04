@@ -11,7 +11,7 @@ import scala.annotation.tailrec
 final case class Min[A](getMin: A) extends AnyVal
 
 object Min extends MinInstances0{
-  implicit def newtypeInstance[A]: Newtype[Min[A], A] = Newtype.from[Min[A], A](Min.apply)(_.getMin)
+  implicit def newtypeInstance[A]: Newtype.Aux[Min[A], A] = Newtype.from[Min[A], A](Min.apply)(_.getMin)
 
   implicit val monadInstance: Monad[Min] = new Monad[Min] {
     def pure[A](x: A): Min[A] = Min(x)

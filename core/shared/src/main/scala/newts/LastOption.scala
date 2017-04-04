@@ -9,7 +9,7 @@ import cats.{Applicative, Eval, MonadCombine, Monoid, MonoidK, Show, Traverse}
 final case class LastOption[A](getLastOption: Option[A]) extends AnyVal
 
 object LastOption extends LastOptionInstances0 {
-  implicit def newtypeInstance[A]: Newtype[LastOption[A], Option[A]] =
+  implicit def newtypeInstance[A]: Newtype.Aux[LastOption[A], Option[A]] =
     Newtype.from[LastOption[A], Option[A]](LastOption.apply)(_.getLastOption)
 
   implicit val monadCombineInstance: MonadCombine[LastOption] = new MonadCombine[LastOption] {

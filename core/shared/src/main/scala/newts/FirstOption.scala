@@ -11,7 +11,7 @@ import scala.annotation.tailrec
 final case class FirstOption[A](getFirstOption: Option[A]) extends AnyVal
 
 object FirstOption extends FirstOptionInstances0 {
-  implicit def newtypeInstance[A]: Newtype[FirstOption[A], Option[A]] =
+  implicit def newtypeInstance[A]: Newtype.Aux[FirstOption[A], Option[A]] =
     Newtype.from[FirstOption[A], Option[A]](FirstOption.apply)(_.getFirstOption)
 
   implicit val monadCombineInstance: MonadCombine[FirstOption] = new MonadCombine[FirstOption] {
