@@ -7,6 +7,8 @@ import cats.kernel.Eq
 final case class ZipList[A](getZipList: List[A]) extends AnyVal
 
 object ZipList {
+  implicit def newtypeInstance[A]: Newtype.Aux[ZipList[A], List[A]] =
+    Newtype.from[ZipList[A], List[A]](ZipList.apply)(_.getZipList)
 
   implicit val instances: Apply[ZipList] = new Apply[ZipList] {
     def map[A, B](fa: ZipList[A])(f: A => B): ZipList[B] =

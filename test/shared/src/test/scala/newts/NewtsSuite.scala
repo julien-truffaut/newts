@@ -18,43 +18,33 @@ trait NewtsSuite extends FunSuite
   with ArbitraryInstances
 
 trait ArbitraryInstances {
-  case class Iso[S, A](get: S => A, reGet: A => S)
-  val allIso: Iso[Boolean, All] = Iso[Boolean, All](All(_), _.getAll)
-  val anyIso: Iso[Boolean, Any] = Iso[Boolean, Any](Any(_), _.getAny)
-  def multIso[A]: Iso[A, Mult[A]] = Iso[A, Mult[A]](Mult(_), _.getMult)
-  def dualIso[A]: Iso[A, Dual[A]] = Iso[A, Dual[A]](Dual(_), _.getDual)
-  def firstIso[A]: Iso[A, First[A]] = Iso[A, First[A]](First(_), _.getFirst)
-  def lastIso[A]: Iso[A, Last[A]] = Iso[A, Last[A]](Last(_), _.getLast)
-  def firstOptionIso[A]: Iso[Option[A], FirstOption[A]] = Iso[Option[A], FirstOption[A]](FirstOption(_), _.getFirstOption)
-  def lastOptionIso[A]: Iso[Option[A], LastOption[A]] = Iso[Option[A], LastOption[A]](LastOption(_), _.getLastOption)
-  def minIso[A]: Iso[A, Min[A]] = Iso[A, Min[A]](Min(_), _.getMin)
-  def maxIso[A]: Iso[A, Max[A]] = Iso[A, Max[A]](Max(_), _.getMax)
-  def zipListIso[A]: Iso[List[A], ZipList[A]] = Iso[List[A], ZipList[A]](ZipList(_), _.getZipList)
+  def arbNewtype[S, A: Arbitrary](implicit newtype: Newtype.Aux[S, A]): Arbitrary[S] =
+    Arbitrary(arbitrary[A].map(newtype.wrap))
 
-  def arbFromIso[A: Arbitrary, B](iso: Iso[A, B]): Arbitrary[B] = Arbitrary(arbitrary[A].map(iso.get))
-  def cogenFromIso[A: Cogen, B](iso: Iso[A, B]): Cogen[B] = Cogen[A].contramap(iso.reGet)
+  def cogenNewtype[S, A: Cogen](implicit newtype: Newtype.Aux[S, A]): Cogen[S] =
+    Cogen[A].contramap(newtype.unwrap)
 
-  implicit val allArbitrary: Arbitrary[All] = arbFromIso(allIso)
-  implicit val anyArbitrary: Arbitrary[Any] = arbFromIso(anyIso)
-  implicit def multArbitrary[A:Arbitrary]: Arbitrary[Mult[A]] = arbFromIso(multIso)
-  implicit def dualArbitrary[A: Arbitrary]: Arbitrary[Dual[A]] = arbFromIso(dualIso)
-  implicit def firstArbitrary[A: Arbitrary]: Arbitrary[First[A]] = arbFromIso(firstIso)
-  implicit def lastArbitrary[A: Arbitrary]: Arbitrary[Last[A]] = arbFromIso(lastIso)
-  implicit def firstOptionArbitrary[A: Arbitrary]: Arbitrary[FirstOption[A]] = arbFromIso(firstOptionIso)
-  implicit def lastOptionArbitrary[A: Arbitrary]: Arbitrary[LastOption[A]]  = arbFromIso(lastOptionIso)
-  implicit def minArbitrary[A: Arbitrary]: Arbitrary[Min[A]]  = arbFromIso(minIso)
-  implicit def maxArbitrary[A: Arbitrary]: Arbitrary[Max[A]]  = arbFromIso(maxIso)
-  implicit def zipListArbitrary[A: Arbitrary]: Arbitrary[ZipList[A]] = arbFromIso(zipListIso)
+  implicit val allArbitrary: Arbitrary[All] = arbNewtype[All, Boolean]
+  implicit val anyArbitrary: Arbitrary[Any] = arbNewtype[Any, Boolean]
+  implicit def multArbitrary[A:Arbitrary]: Arbitrary[Mult[A]] = arbNewtype[Mult[A], A]
+  implicit def dualArbitrary[A: Arbitrary]: Arbitrary[Dual[A]] = arbNewtype[Dual[A], A]
+  implicit def firstArbitrary[A: Arbitrary]: Arbitrary[First[A]] = arbNewtype[First[A], A]
+  implicit def lastArbitrary[A: Arbitrary]: Arbitrary[Last[A]] = arbNewtype[Last[A], A]
+  implicit def firstOptionArbitrary[A: Arbitrary]: Arbitrary[FirstOption[A]] = arbNewtype[FirstOption[A], Option[A]]
+  implicit def lastOptionArbitrary[A: Arbitrary]: Arbitrary[LastOption[A]]  = arbNewtype[LastOption[A], Option[A]]
+  implicit def minArbitrary[A: Arbitrary]: Arbitrary[Min[A]]  = arbNewtype[Min[A], A]
+  implicit def maxArbitrary[A: Arbitrary]: Arbitrary[Max[A]]  = arbNewtype[Max[A], A]
+  implicit def zipListArbitrary[A: Arbitrary]: Arbitrary[ZipList[A]] = arbNewtype[ZipList[A], List[A]]
 
-  implicit val allCogen: Cogen[All] = cogenFromIso(allIso)
-  implicit val anyCogen: Cogen[Any] = cogenFromIso(anyIso)
-  implicit def multCogen[A: Cogen]: Cogen[Mult[A]] = cogenFromIso(multIso)
-  implicit def dualCogen[A: Cogen]: Cogen[Dual[A]] = cogenFromIso(dualIso)
-  implicit def firstCogen[A: Cogen]: Cogen[First[A]] = cogenFromIso(firstIso)
-  implicit def lastCogen[A: Cogen]: Cogen[Last[A]] = cogenFromIso(lastIso)
-  implicit def firstOptionCogen[A: Cogen]: Cogen[FirstOption[A]] = cogenFromIso(firstOptionIso)
-  implicit def lastOptionCogen[A: Cogen] : Cogen[LastOption[A]]  = cogenFromIso(lastOptionIso)
-  implicit def minOptionCogen[A: Cogen] : Cogen[Min[A]]  = cogenFromIso(minIso)
-  implicit def maxOptionCogen[A: Cogen] : Cogen[Max[A]]  = cogenFromIso(maxIso)
-  implicit def zipListCogen[A: Cogen]: Cogen[ZipList[A]] = cogenFromIso(zipListIso)
+  implicit val allCogen: Cogen[All] = cogenNewtype[All, Boolean]
+  implicit val anyCogen: Cogen[Any] = cogenNewtype[Any, Boolean]
+  implicit def multCogen[A: Cogen]: Cogen[Mult[A]] = cogenNewtype[Mult[A], A]
+  implicit def dualCogen[A: Cogen]: Cogen[Dual[A]] = cogenNewtype[Dual[A], A]
+  implicit def firstCogen[A: Cogen]: Cogen[First[A]] = cogenNewtype[First[A], A]
+  implicit def lastCogen[A: Cogen]: Cogen[Last[A]] = cogenNewtype[Last[A], A]
+  implicit def firstOptionCogen[A: Cogen]: Cogen[FirstOption[A]] = cogenNewtype[FirstOption[A], Option[A]]
+  implicit def lastOptionCogen[A: Cogen] : Cogen[LastOption[A]]  = cogenNewtype[LastOption[A], Option[A]]
+  implicit def minOptionCogen[A: Cogen] : Cogen[Min[A]]  = cogenNewtype[Min[A], A]
+  implicit def maxOptionCogen[A: Cogen] : Cogen[Max[A]]  = cogenNewtype[Max[A], A]
+  implicit def zipListCogen[A: Cogen]: Cogen[ZipList[A]] = cogenNewtype[ZipList[A], List[A]]
 }
