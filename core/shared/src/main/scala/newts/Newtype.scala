@@ -12,7 +12,7 @@ trait Newtype[S] {
 object Newtype {
   type Aux[S, A0] = Newtype[S] { type A = A0 }
 
-  def apply[S](implicit ev: Newtype[S]): Newtype[S] = ev
+  def apply[S](implicit ev: Newtype[S]): Aux[S, ev.A] = ev
 
   def from[S, A0](f: A0 => S)(g: S => A0): Aux[S, A0] = new Newtype[S] {
     type A = A0
