@@ -4,7 +4,7 @@ import cats.instances.option._
 import cats.kernel.Eq
 import cats.syntax.functor._
 import cats.syntax.traverse._
-import cats.{Applicative, Eval, MonadCombine, Monoid, MonoidK, Show, Traverse}
+import cats.{Alternative, Applicative, Eval, Monad, Monoid, MonoidK, Show, Traverse}
 
 final case class LastOption[A](getLastOption: Option[A]) extends AnyVal
 
@@ -12,7 +12,7 @@ object LastOption extends LastOptionInstances0 {
   implicit def newtypeInstance[A]: Newtype.Aux[LastOption[A], Option[A]] =
     Newtype.from[LastOption[A], Option[A]](LastOption.apply)(_.getLastOption)
 
-  implicit val monadCombineInstance: MonadCombine[LastOption] = new MonadCombine[LastOption] {
+  implicit val monadAlternativeInstance: Monad[LastOption] with Alternative[LastOption] = new Monad[LastOption] with Alternative[LastOption] {
     override def empty[A]: LastOption[A] = LastOption(None)
     override def combineK[A](x: LastOption[A], y: LastOption[A]): LastOption[A] = LastOption(y.getLastOption.orElse(x.getLastOption))
     override def pure[A](x: A): LastOption[A] = LastOption(Some(x))
