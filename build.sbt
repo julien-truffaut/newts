@@ -32,8 +32,9 @@ lazy val buildSettings = Seq(
   scmInfo := Some(ScmInfo(url("https://github.com/julien-truffaut/newts"), "scm:git:git@github.com:julien-truffaut/newts.git"))
 )
 
-lazy val cats      = Def.setting("org.typelevel"   %%% "cats"       % "0.9.0")
-lazy val catsLaws  = Def.setting("org.typelevel"   %%% "cats-laws"  % "0.9.0")
+lazy val catsVersion = "1.0.0-MF"
+lazy val cats      = Def.setting("org.typelevel"   %%% "cats-core"  % catsVersion)
+lazy val catsLaws  = Def.setting("org.typelevel"   %%% "cats-laws"  % catsVersion)
 
 lazy val scalatest = Def.setting("org.scalatest"                %%% "scalatest"     % "3.0.1"  % "test")
 

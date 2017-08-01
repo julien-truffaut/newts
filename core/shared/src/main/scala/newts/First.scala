@@ -19,7 +19,7 @@ object First extends FirstInstances0 {
       case First(Right(b)) => First(b)
     }
   }
-  
+
   implicit val semigroupKInstance: SemigroupK[First] = new SemigroupK[First] {
     def combineK[A](x: First[A], y: First[A]) = x
   }
@@ -28,7 +28,7 @@ object First extends FirstInstances0 {
 
   implicit def eqInstance[A: Eq]: Eq[First[A]] = Eq.by(_.getFirst)
 
-  implicit def showIntance[A : Show]: Show[First[A]] = new Show[First[A]] {
+  implicit def showInstance[A : Show]: Show[First[A]] = new Show[First[A]] {
     override def show(f: First[A]): String = s"First(${Show[A].show(f.getFirst)})"
   }
 }

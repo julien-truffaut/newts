@@ -1,6 +1,6 @@
 package newts
 
-import cats.{Applicative, Eval, MonadCombine, Monoid, MonoidK, Show, Traverse}
+import cats.{Alternative, Applicative, Eval, Monad, Monoid, MonoidK, Show, Traverse}
 import cats.instances.option._
 import cats.syntax.functor._
 import cats.syntax.traverse._
@@ -14,7 +14,7 @@ object FirstOption extends FirstOptionInstances0 {
   implicit def newtypeInstance[A]: Newtype.Aux[FirstOption[A], Option[A]] =
     Newtype.from[FirstOption[A], Option[A]](FirstOption.apply)(_.getFirstOption)
 
-  implicit val monadCombineInstance: MonadCombine[FirstOption] = new MonadCombine[FirstOption] {
+  implicit val monadAlternativeInstance: Monad[FirstOption] with Alternative[FirstOption] = new Monad[FirstOption] with Alternative[FirstOption] {
     def empty[A]: FirstOption[A] = FirstOption(None)
     def combineK[A](x: FirstOption[A], y: FirstOption[A]): FirstOption[A] = FirstOption(x.getFirstOption.orElse(y.getFirstOption))
     def pure[A](x: A): FirstOption[A] = FirstOption(Some(x))
