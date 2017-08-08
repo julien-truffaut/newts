@@ -28,9 +28,9 @@ object Last extends LastInstances0 {
 
   implicit def eqInstance[A: Eq]: Eq[Last[A]] = Eq.by(_.getLast)
 
-  implicit def showInstance[A : Show]: Show[Last[A]] = new Show[Last[A]] {
-    override def show(f: Last[A]): String = s"Last(${Show[A].show(f.getLast)})"
-  }
+  implicit def showInstance[A](implicit ev: Show[A]): Show[Last[A]] = Show.show(a =>
+    s"Last(${ev.show(a.getLast)})"
+  )
 }
 
 trait LastInstances0 {

@@ -34,9 +34,9 @@ object FirstOption extends FirstOptionInstances0 {
 
   implicit def eqInstance[A: Eq]: Eq[FirstOption[A]] = Eq.by(_.getFirstOption)
 
-  implicit def showInstance[A: Show]: Show[FirstOption[A]] = new Show[FirstOption[A]] {
-    override def show(f: FirstOption[A]): String = s"FirstOption(${Show[Option[A]].show(f.getFirstOption)})"
-  }
+  implicit def showInstance[A: Show]: Show[FirstOption[A]] = Show.show(a =>
+    s"FirstOption(${Show[Option[A]].show(a.getFirstOption)})"
+  )
 }
 
 trait FirstOptionInstances0 {

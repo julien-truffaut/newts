@@ -28,9 +28,9 @@ object Max extends MaxInstances0{
     def compare(x: Max[A], y: Max[A]): Int = x.getMax compare y.getMax
   }
 
-  implicit def showInstance[A](implicit ev: Show[A]): Show[Max[A]] = new Show[Max[A]] {
-    override def show(f: Max[A]): String = s"Max(${ev.show(f.getMax)})"
-  }
+  implicit def showInstance[A](implicit ev: Show[A]): Show[Max[A]] = Show.show(a =>
+    s"Max(${ev.show(a.getMax)})"
+  )
 }
 
 trait MaxInstances0{

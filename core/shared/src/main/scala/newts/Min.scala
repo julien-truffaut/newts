@@ -28,9 +28,9 @@ object Min extends MinInstances0{
     def compare(x: Min[A], y: Min[A]): Int = x.getMin compare y.getMin
   }
 
-  implicit def showInstance[A](implicit ev: Show[A]): Show[Min[A]] = new Show[Min[A]] {
-    override def show(f: Min[A]): String = s"Min(${ev.show(f.getMin)})"
-  }
+  implicit def showInstance[A](implicit ev: Show[A]): Show[Min[A]] = Show.show(a =>
+    s"Min(${ev.show(a.getMin)})"
+  )
 }
 
 trait MinInstances0{

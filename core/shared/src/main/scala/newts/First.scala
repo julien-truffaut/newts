@@ -28,9 +28,9 @@ object First extends FirstInstances0 {
 
   implicit def eqInstance[A: Eq]: Eq[First[A]] = Eq.by(_.getFirst)
 
-  implicit def showInstance[A : Show]: Show[First[A]] = new Show[First[A]] {
-    override def show(f: First[A]): String = s"First(${Show[A].show(f.getFirst)})"
-  }
+  implicit def showInstance[A](implicit ev: Show[A]): Show[First[A]] = Show.show(a =>
+    s"First(${Show[A].show(a.getFirst)})"
+  )
 }
 
 trait FirstInstances0 {

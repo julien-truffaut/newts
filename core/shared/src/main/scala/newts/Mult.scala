@@ -2,7 +2,7 @@ package newts
 
 import cats.kernel.Eq
 import cats.syntax.functor._
-import cats.{Applicative, Eval, Monad, Monoid, Traverse}
+import cats.{Applicative, Eval, Monad, Monoid, Show, Traverse}
 
 import scala.annotation.tailrec
 
@@ -27,6 +27,10 @@ object Mult extends MultInstances0 {
   }
 
   implicit def eqInstance[A: Eq]: Eq[Mult[A]] = Eq.by(_.getMult)
+
+  implicit def showInstance[A](implicit ev: Show[A]): Show[Mult[A]] = Show.show(a =>
+    s"Mult(${ev.show(a.getMult)})"
+  )
 }
 
 trait MultInstances0 {

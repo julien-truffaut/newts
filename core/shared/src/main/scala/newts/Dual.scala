@@ -25,9 +25,9 @@ object Dual extends DualInstances0 {
     def combine(x: Dual[A], y: Dual[A]): Dual[A] = Dual(A.combine(y.getDual, x.getDual))
   }
 
-  implicit def showInstance[A : Show]: Show[Dual[A]] = new Show[Dual[A]] {
-    override def show(f: Dual[A]): String = s"Dual(${Show[A].show(f.getDual)})"
-  }
+  implicit def showInstance[A](implicit ev: Show[A]): Show[Dual[A]] = Show.show(a =>
+    s"Dual(${Show[A].show(a.getDual)})"
+  )
 
   implicit def dualEq[A: Eq]: Eq[Dual[A]] = Eq.by(_.getDual)
 }

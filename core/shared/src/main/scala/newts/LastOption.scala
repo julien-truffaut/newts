@@ -32,9 +32,9 @@ object LastOption extends LastOptionInstances0 {
 
   implicit def eqInstance[A: Eq]: Eq[LastOption[A]] = Eq.by(_.getLastOption)
 
-  implicit def showInstance[A](implicit ev: Show[Option[A]]): Show[LastOption[A]] = new Show[LastOption[A]] {
-    override def show(f: LastOption[A]): String =  s"LastOption(${ev.show(f.getLastOption)})"
-  }
+  implicit def showInstance[A: Show]: Show[LastOption[A]] = Show.show(a =>
+    s"LastOption(${Show[Option[A]].show(a.getLastOption)})"
+  )
 }
 
 trait LastOptionInstances0 {
