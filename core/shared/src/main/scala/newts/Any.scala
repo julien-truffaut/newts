@@ -1,6 +1,5 @@
 package newts
 
-import cats.instances.boolean._
 import cats.kernel.Eq
 import cats.{Monoid, Show}
 
@@ -15,7 +14,5 @@ object Any {
     def combine(x: Any, y: Any): Any = Any(x.getAny || y.getAny)
   }
 
-  implicit def showInstance: Show[Any] = new Show[Any] {
-    def show(any: Any): String = s"Any(${Show[Boolean].show(any.getAny)})"
-  }
+  implicit def showInstance: Show[Any] = Show.fromToString
 }
