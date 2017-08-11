@@ -10,7 +10,7 @@ trait AllSyntax {
   implicit final def optionOps[A](self: Option[A]): OptionOps[A] = new OptionOps(self)
   implicit final def valueOps[A](self: A): ValueOps[A] = new ValueOps(self)
   implicit final def wrapOps[A](self: A): WrapOps[A] = new WrapOps(self)
-  implicit final def unwrapOps[A: Newtype](self: A): UnWrapOps[A] = new UnWrapOps(self)
+  implicit final def unwrapOps[S, A](self: S)(implicit ev: Newtype.Aux[S, A]): UnWrapOps[S, A] = new UnWrapOps(self)
 }
 
 final class BooleanOps(val self: Boolean) extends AnyVal {
@@ -41,6 +41,6 @@ final class WrapOps[A](val self: A) {
   def wrap[S](implicit S: Newtype.Aux[S, A]): S = S.wrap(self)
 }
 
-final class UnWrapOps[S](val self: S)(implicit val ev: Newtype[S]) {
-  def unwrap: ev.A = ev.unwrap(self)
+final class UnWrapOps[S, A](val self: S)(implicit val ev: Newtype.Aux[S, A]) {
+  def unwrap: A = ev.unwrap(self)
 }
