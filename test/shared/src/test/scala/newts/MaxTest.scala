@@ -1,13 +1,13 @@
 package newts
 
-import cats.kernel.laws.{GroupLaws, OrderLaws}
+import cats.kernel.laws.discipline.{SemigroupTests, MonoidTests, OrderTests}
 import cats.laws.discipline.{MonadTests, TraverseTests}
 
 class MaxTest extends NewtsSuite {
 
-  checkAll("Max[Int]", GroupLaws[Max[Int]].semigroup)
-  checkAll("Max[Int]", GroupLaws[Max[Int]].monoid)
-  checkAll("Max[Int]", OrderLaws[Max[Int]].order)
+  checkAll("Max[Int]", SemigroupTests[Max[Int]].semigroup)
+  checkAll("Max[Int]", MonoidTests[Max[Int]].monoid)
+  checkAll("Max[Int]", OrderTests[Max[Int]].order)
   checkAll("Max[Int]", MonadTests[Max].monad[Int, Int, Int])
   checkAll("Max[Int]", TraverseTests[Max].traverse[Int, Int, Int, Int, Option, Option])
 

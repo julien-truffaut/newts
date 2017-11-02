@@ -1,11 +1,11 @@
 package newts
 
-import cats.kernel.laws.{GroupLaws, OrderLaws}
+import cats.kernel.laws.discipline.{MonoidTests, EqTests}
 
 class AllTest extends NewtsSuite {
 
-  checkAll("All", GroupLaws[All].monoid)
-  checkAll("All", OrderLaws[All].eqv)
+  checkAll("All", MonoidTests[All].monoid)
+  checkAll("All", EqTests[All].eqv)
 
   test("combine"){
     true.asAll   |+| true.asAll   shouldEqual true.asAll

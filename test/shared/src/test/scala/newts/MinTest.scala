@@ -1,13 +1,13 @@
 package newts
 
-import cats.kernel.laws.{GroupLaws, OrderLaws}
+import cats.kernel.laws.discipline.{SemigroupTests, MonoidTests, OrderTests}
 import cats.laws.discipline.{MonadTests, TraverseTests}
 
 class MinTest extends NewtsSuite {
 
-  checkAll("Min[Int]", GroupLaws[Min[Int]].semigroup)
-  checkAll("Min[Int]", GroupLaws[Min[Int]].monoid)
-  checkAll("Min[Int]", OrderLaws[Min[Int]].order)
+  checkAll("Min[Int]", SemigroupTests[Min[Int]].semigroup)
+  checkAll("Min[Int]", MonoidTests[Min[Int]].monoid)
+  checkAll("Min[Int]", OrderTests[Min[Int]].order)
   checkAll("Min[Int]", MonadTests[Dual].monad[Int, Int, Int])
   checkAll("Min[Int]", TraverseTests[Min].traverse[Int, Int, Int, Int, Option, Option])
 

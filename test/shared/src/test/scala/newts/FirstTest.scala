@@ -1,14 +1,14 @@
 package newts
 
-import cats.kernel.laws.{GroupLaws, OrderLaws}
+import cats.kernel.laws.discipline.{SemigroupTests, EqTests}
 import cats.laws.discipline.{MonadTests, SemigroupKTests, TraverseTests}
 import fixtures.ShowTestClass
 
 class FirstTest extends NewtsSuite {
 
   checkAll("First[Int]", SemigroupKTests[First].semigroupK[Int])
-  checkAll("First[Int]", GroupLaws[First[Int]].semigroup)
-  checkAll("First[Int]", OrderLaws[First[Int]].eqv)
+  checkAll("First[Int]", SemigroupTests[First[Int]].semigroup)
+  checkAll("First[Int]", EqTests[First[Int]].eqv)
   checkAll("First[Int]", MonadTests[First].monad[Int, Int, Int])
   checkAll("First[Int]", TraverseTests[First].traverse[Int, Int, Int, Int, Option, Option])
 
