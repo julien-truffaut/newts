@@ -1,14 +1,14 @@
 package newts
 
-import cats.kernel.laws.{GroupLaws, OrderLaws}
+import cats.kernel.laws.discipline.{MonoidTests, EqTests}
 import cats.laws.discipline.{AlternativeTests, TraverseTests}
 import fixtures.ShowTestClass
 
 class FirstOptionTest extends NewtsSuite {
 
   checkAll("FirstOption[Int]", AlternativeTests[FirstOption].monoidK[Int])
-  checkAll("FirstOption[Int]", GroupLaws[FirstOption[Int]].monoid)
-  checkAll("FirstOption[Int]", OrderLaws[FirstOption[Int]].eqv)
+  checkAll("FirstOption[Int]", MonoidTests[FirstOption[Int]].monoid)
+  checkAll("FirstOption[Int]", EqTests[FirstOption[Int]].eqv)
   checkAll("FirstOption[Int]", TraverseTests[FirstOption].traverse[Int, Int, Int, Int, Option, Option])
 
   test("combine"){

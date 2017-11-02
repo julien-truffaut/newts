@@ -1,16 +1,16 @@
 package newts
 
 import cats.data.NonEmptyList
-import cats.kernel.laws.{GroupLaws, OrderLaws}
+import cats.kernel.laws.discipline.{EqTests, MonoidTests, SemigroupTests}
 import cats.laws.discipline.{MonadTests, TraverseTests}
 import cats.laws.discipline.arbitrary._
 import fixtures.ShowTestClass
 
 class DualTest extends NewtsSuite {
 
-  checkAll("Dual[NonEmptyList[Int]]", GroupLaws[Dual[NonEmptyList[Int]]].semigroup)
-  checkAll("Dual[List[Int]]"        , GroupLaws[Dual[List[Int]]].monoid)
-  checkAll("Dual[Int]"              , OrderLaws[Dual[Int]].eqv)
+  checkAll("Dual[NonEmptyList[Int]]", SemigroupTests[Dual[NonEmptyList[Int]]].semigroup)
+  checkAll("Dual[List[Int]]"        , MonoidTests[Dual[List[Int]]].monoid)
+  checkAll("Dual[Int]"              , EqTests[Dual[Int]].eqv)
   checkAll("Dual[Int]"              , MonadTests[Dual].monad[Int, Int, Int])
   checkAll("Dual[Int]"              , TraverseTests[Dual].traverse[Int, Int, Int, Int, Option, Option])
 
