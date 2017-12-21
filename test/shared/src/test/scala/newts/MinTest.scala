@@ -1,14 +1,14 @@
 package newts
 
 import cats.kernel.laws.discipline.{CommutativeSemigroupTests, CommutativeMonoidTests, OrderTests}
-import cats.laws.discipline.{MonadTests, TraverseTests}
+import cats.laws.discipline.{CommutativeMonadTests, TraverseTests}
 
 class MinTest extends NewtsSuite {
 
   checkAll("Min[Int]", CommutativeSemigroupTests[Min[Int]].commutativeSemigroup)
   checkAll("Min[Int]", CommutativeMonoidTests[Min[Int]].commutativeMonoid)
   checkAll("Min[Int]", OrderTests[Min[Int]].order)
-  checkAll("Min[Int]", MonadTests[Dual].monad[Int, Int, Int])
+  checkAll("Min[Int]", CommutativeMonadTests[Min].commutativeMonad[Int, Int, Int])
   checkAll("Min[Int]", TraverseTests[Min].traverse[Int, Int, Int, Int, Option, Option])
 
   test("combine"){

@@ -3,7 +3,7 @@ package newts
 import cats.kernel.{CommutativeMonoid, CommutativeSemigroup, Order}
 import cats.syntax.functor._
 import cats.syntax.order._
-import cats.{Applicative, Eval, Monad, Show, Traverse}
+import cats.{Applicative, Eval, CommutativeMonad, Show, Traverse}
 import newts.internal.MinBounded
 
 import scala.annotation.tailrec
@@ -13,7 +13,7 @@ final case class Max[A](getMax: A) extends AnyVal
 object Max extends MaxInstances0{
   implicit def newtypeInstance[A]: Newtype.Aux[Max[A], A] = Newtype.from[Max[A], A](Max.apply)(_.getMax)
 
-  implicit val monadInstance: Monad[Max] = new Monad[Max] {
+  implicit val monadInstance: CommutativeMonad[Max] = new CommutativeMonad[Max] {
     def pure[A](x: A): Max[A] = Max(x)
     def flatMap[A, B](fa: Max[A])(f: A => Max[B]): Max[B] = f(fa.getMax)
     @tailrec

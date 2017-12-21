@@ -3,7 +3,7 @@ package newts
 import cats.kernel.{CommutativeMonoid, CommutativeSemigroup, Order}
 import cats.syntax.functor._
 import cats.syntax.order._
-import cats.{Applicative, Eval, Monad, Show, Traverse}
+import cats.{Applicative, Eval, CommutativeMonad, Show, Traverse}
 import newts.internal.MaxBounded
 
 import scala.annotation.tailrec
@@ -13,7 +13,7 @@ final case class Min[A](getMin: A) extends AnyVal
 object Min extends MinInstances0{
   implicit def newtypeInstance[A]: Newtype.Aux[Min[A], A] = Newtype.from[Min[A], A](Min.apply)(_.getMin)
 
-  implicit val monadInstance: Monad[Min] = new Monad[Min] {
+  implicit val monadInstance: CommutativeMonad[Min] = new CommutativeMonad[Min] {
     def pure[A](x: A): Min[A] = Min(x)
     def flatMap[A, B](fa: Min[A])(f: A => Min[B]): Min[B] = f(fa.getMin)
     @tailrec
