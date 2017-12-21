@@ -7,8 +7,8 @@ import sbtunidoc.Plugin.UnidocKeys._
 
 lazy val buildSettings = Seq(
   organization       := "com.github.julien-truffaut",
-  scalaVersion       := "2.12.3",
-  crossScalaVersions := Seq("2.12.3", "2.11.11"),
+  scalaVersion       := "2.12.4",
+  crossScalaVersions := Seq("2.12.4", "2.11.12"),
   scalacOptions     ++= Seq(
     "-deprecation",
     "-encoding", "UTF-8",
@@ -20,10 +20,7 @@ lazy val buildSettings = Seq(
     "-Ywarn-dead-code",
     "-Ywarn-value-discard",
     "-Xfuture"
-  ) ++ (CrossVersion.partialVersion(scalaVersion.value) match {
-    case Some((2, 10)) => Seq("-Yno-generic-signatures") // no generic signatures for scala 2.10.x, see SI-7932, #571 and #828
-    case _             => Seq()
-  }),
+  ),
   addCompilerPlugin(kindProjector),
   resolvers ++= Seq(
     Resolver.sonatypeRepo("releases"),
@@ -32,13 +29,13 @@ lazy val buildSettings = Seq(
   scmInfo := Some(ScmInfo(url("https://github.com/julien-truffaut/newts"), "scm:git:git@github.com:julien-truffaut/newts.git"))
 )
 
-lazy val catsVersion = "1.0.0-RC1"
-lazy val cats      = Def.setting("org.typelevel"   %%% "cats-core"  % catsVersion)
-lazy val catsLaws  = Def.setting("org.typelevel"   %%% "cats-laws"  % catsVersion)
+lazy val catsVersion = "1.0.0-RC2"
+lazy val cats      = Def.setting("org.typelevel" %%% "cats-core" % catsVersion)
+lazy val catsLaws  = Def.setting("org.typelevel" %%% "cats-laws" % catsVersion)
 
-lazy val scalatest = Def.setting("org.scalatest"                %%% "scalatest"     % "3.0.1"  % "test")
+lazy val scalatest = Def.setting("org.scalatest" %%% "scalatest" % "3.0.4" % "test")
 
-lazy val kindProjector  = "org.spire-math"  % "kind-projector" % "0.9.3" cross CrossVersion.binary
+lazy val kindProjector  = "org.spire-math"  % "kind-projector" % "0.9.5" cross CrossVersion.binary
 
 lazy val tagName = Def.setting(
  s"v${if (releaseUseGlobalVersion.value) (version in ThisBuild).value else version.value}")
@@ -53,7 +50,7 @@ lazy val scalajsSettings = Seq(
     val g = "https://raw.githubusercontent.com/julien-truffaut/newts"
     s"-P:scalajs:mapSourceURI:$a->$g/$s/"
   },
-  requiresDOM := false,
+  jsEnv := new org.scalajs.jsenv.nodejs.NodeJSEnv(),
   testOptions in Test += Tests.Argument(TestFrameworks.ScalaCheck,
                            "-maxSize", "8",
                            "-minSuccessfulTests", "50")
