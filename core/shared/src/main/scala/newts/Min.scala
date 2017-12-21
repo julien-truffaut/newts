@@ -1,9 +1,9 @@
 package newts
 
-import cats.kernel.Order
+import cats.kernel.{CommutativeMonoid, CommutativeSemigroup, Order}
 import cats.syntax.functor._
 import cats.syntax.order._
-import cats.{Applicative, Eval, Monad, Monoid, Semigroup, Show, Traverse}
+import cats.{Applicative, Eval, Monad, Show, Traverse}
 import newts.internal.MaxBounded
 
 import scala.annotation.tailrec
@@ -23,7 +23,7 @@ object Min extends MinInstances0{
     }
   }
   
-  implicit def instances[A: Order]: Order[Min[A]] with Semigroup[Min[A]] = new Order[Min[A]] with Semigroup[Min[A]] {
+  implicit def instances[A: Order]: Order[Min[A]] with CommutativeSemigroup[Min[A]] = new Order[Min[A]] with CommutativeSemigroup[Min[A]] {
     def combine(x: Min[A], y: Min[A]): Min[A] = Min(x.getMin min y.getMin)
     def compare(x: Min[A], y: Min[A]): Int = x.getMin compare y.getMin
   }
@@ -34,7 +34,7 @@ object Min extends MinInstances0{
 }
 
 trait MinInstances0{
-  implicit def minMonoid[A](implicit A: MaxBounded[A]): Monoid[Min[A]] = new Monoid[Min[A]]{
+  implicit def minMonoid[A](implicit A: MaxBounded[A]): CommutativeMonoid[Min[A]] = new CommutativeMonoid[Min[A]]{
     def empty: Min[A] = Min(MaxBounded[A].maxValue)
     def combine(x: Min[A], y: Min[A]): Min[A] = Min(x.getMin min y.getMin)
   }
