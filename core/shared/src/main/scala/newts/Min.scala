@@ -1,9 +1,9 @@
 package newts
 
-import cats.kernel.Order
+import cats.kernel.{CommutativeMonoid, CommutativeSemigroup, Order}
 import cats.syntax.functor._
 import cats.syntax.order._
-import cats.{Applicative, Eval, Monad, Monoid, Semigroup, Show, Traverse}
+import cats.{Applicative, Eval, CommutativeMonad, Show, Traverse}
 import newts.internal.MaxBounded
 
 import scala.annotation.tailrec
@@ -13,7 +13,7 @@ final case class Min[A](getMin: A) extends AnyVal
 object Min extends MinInstances0{
   implicit def newtypeInstance[A]: Newtype.Aux[Min[A], A] = Newtype.from[Min[A], A](Min.apply)(_.getMin)
 
-  implicit val monadInstance: Monad[Min] = new Monad[Min] {
+  implicit val monadInstance: CommutativeMonad[Min] = new CommutativeMonad[Min] {
     def pure[A](x: A): Min[A] = Min(x)
     def flatMap[A, B](fa: Min[A])(f: A => Min[B]): Min[B] = f(fa.getMin)
     @tailrec
@@ -23,7 +23,7 @@ object Min extends MinInstances0{
     }
   }
   
-  implicit def instances[A: Order]: Order[Min[A]] with Semigroup[Min[A]] = new Order[Min[A]] with Semigroup[Min[A]] {
+  implicit def instances[A: Order]: Order[Min[A]] with CommutativeSemigroup[Min[A]] = new Order[Min[A]] with CommutativeSemigroup[Min[A]] {
     def combine(x: Min[A], y: Min[A]): Min[A] = Min(x.getMin min y.getMin)
     def compare(x: Min[A], y: Min[A]): Int = x.getMin compare y.getMin
   }
@@ -34,7 +34,7 @@ object Min extends MinInstances0{
 }
 
 trait MinInstances0{
-  implicit def minMonoid[A](implicit A: MaxBounded[A]): Monoid[Min[A]] = new Monoid[Min[A]]{
+  implicit def minMonoid[A](implicit A: MaxBounded[A]): CommutativeMonoid[Min[A]] = new CommutativeMonoid[Min[A]]{
     def empty: Min[A] = Min(MaxBounded[A].maxValue)
     def combine(x: Min[A], y: Min[A]): Min[A] = Min(x.getMin min y.getMin)
   }

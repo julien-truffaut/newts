@@ -1,8 +1,8 @@
 package newts
 
-import cats.kernel.Eq
+import cats.kernel.{CommutativeMonoid, Eq}
 import cats.syntax.functor._
-import cats.{Applicative, Eval, Monad, Monoid, Show, Traverse}
+import cats.{Applicative, Eval, CommutativeMonad, Show, Traverse}
 
 import scala.annotation.tailrec
 
@@ -11,7 +11,7 @@ final case class Mult[A](getMult: A) extends AnyVal
 object Mult extends MultInstances0 {
   implicit def newtypeInstance[A]: Newtype.Aux[Mult[A], A] = Newtype.from[Mult[A], A](Mult.apply)(_.getMult)
 
-  implicit val monadInstance: Monad[Mult] = new Monad[Mult] {
+  implicit val monadInstance: CommutativeMonad[Mult] = new CommutativeMonad[Mult] {
     def pure[A](x: A): Mult[A] = Mult(x)
     def flatMap[A, B](fa: Mult[A])(f: A => Mult[B]): Mult[B] = f(fa.getMult)
     @tailrec
@@ -21,7 +21,7 @@ object Mult extends MultInstances0 {
     }
   }
 
-  implicit def monoidInstance[A](implicit num: Numeric[A]): Monoid[Mult[A]] = new Monoid[Mult[A]] {
+  implicit def monoidInstance[A](implicit num: Numeric[A]): CommutativeMonoid[Mult[A]] = new CommutativeMonoid[Mult[A]] {
     val empty: Mult[A] = Mult(num.one)
     def combine(x: Mult[A], y: Mult[A]): Mult[A] = Mult(num.times(x.getMult, y.getMult))
   }
