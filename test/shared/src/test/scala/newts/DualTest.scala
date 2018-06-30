@@ -1,8 +1,9 @@
 package newts
 
+import cats.Id
 import cats.data.NonEmptyList
 import cats.kernel.laws.discipline.{EqTests, MonoidTests, SemigroupTests}
-import cats.laws.discipline.{MonadTests, TraverseTests}
+import cats.laws.discipline.{DistributiveTests, MonadTests, TraverseTests}
 import cats.laws.discipline.arbitrary._
 import fixtures.ShowTestClass
 
@@ -13,6 +14,7 @@ class DualTest extends NewtsSuite {
   checkAll("Dual[Int]"              , EqTests[Dual[Int]].eqv)
   checkAll("Dual[Int]"              , MonadTests[Dual].monad[Int, Int, Int])
   checkAll("Dual[Int]"              , TraverseTests[Dual].traverse[Int, Int, Int, Int, Option, Option])
+  checkAll("Dual[Int]"              , DistributiveTests[Dual].distributive[Int, Int, Int, Option, Id])
 
   test("combine"){
     val xs = NonEmptyList.of(1,2)

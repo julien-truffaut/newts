@@ -2,7 +2,7 @@ package newts
 
 import cats.kernel.Eq
 import cats.syntax.functor._
-import cats.{Applicative, Eval, Monad, Monoid, Semigroup, Show, Traverse}
+import cats.{Applicative, Distributive, Eval, Functor, Monad, Monoid, Semigroup, Show, Traverse}
 
 import scala.annotation.tailrec
 
@@ -47,5 +47,12 @@ trait DualInstances0 {
 
     def foldRight[A, B](fa: Dual[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
       f(fa.getDual, lb)
+  }
+
+  implicit val distributiveInstance: Distributive[Dual] = new Distributive[Dual] {
+    def distribute[G[_], A, B](ga: G[A])(f: A => Dual[B])(implicit ev: Functor[G]): Dual[G[B]] =
+      Dual(ga.map(f(_).getDual))
+
+    def map[A, B](fa: Dual[A])(f: A => B): Dual[B] = Dual(f(fa.getDual))
   }
 }

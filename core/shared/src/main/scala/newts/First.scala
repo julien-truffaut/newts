@@ -1,6 +1,6 @@
 package newts
 
-import cats.{Applicative, Eq, Eval, Monad, Semigroup, SemigroupK, Show, Traverse}
+import cats.{Applicative, Distributive, Eq, Eval, Functor, Monad, Semigroup, SemigroupK, Show, Traverse}
 import cats.syntax.functor._
 
 import scala.annotation.tailrec
@@ -43,5 +43,12 @@ trait FirstInstances0 {
 
     def foldRight[A, B](fa: First[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
       f(fa.getFirst, lb)
+  }
+
+  implicit val distributiveInstance: Distributive[First] = new Distributive[First] {
+    def distribute[G[_], A, B](ga: G[A])(f: A => First[B])(implicit ev: Functor[G]): First[G[B]] =
+      First(ga.map(f(_).getFirst))
+
+    def map[A, B](fa: First[A])(f: A => B): First[B] = First(f(fa.getFirst))
   }
 }

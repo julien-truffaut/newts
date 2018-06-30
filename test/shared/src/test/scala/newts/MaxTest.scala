@@ -1,7 +1,8 @@
 package newts
 
-import cats.kernel.laws.discipline.{CommutativeSemigroupTests, CommutativeMonoidTests, OrderTests}
-import cats.laws.discipline.{CommutativeMonadTests, TraverseTests}
+import cats.Id
+import cats.kernel.laws.discipline.{CommutativeMonoidTests, CommutativeSemigroupTests, OrderTests}
+import cats.laws.discipline.{CommutativeMonadTests, DistributiveTests, TraverseTests}
 
 class MaxTest extends NewtsSuite {
 
@@ -10,6 +11,7 @@ class MaxTest extends NewtsSuite {
   checkAll("Max[Int]", OrderTests[Max[Int]].order)
   checkAll("Max[Int]", CommutativeMonadTests[Max].commutativeMonad[Int, Int, Int])
   checkAll("Max[Int]", TraverseTests[Max].traverse[Int, Int, Int, Int, Option, Option])
+  checkAll("Max[Int]", DistributiveTests[Max].distributive[Int, Int, Int, Option, Id])
 
   test("combine"){
     5.asMax |+| 1.asMax shouldEqual Max(5)

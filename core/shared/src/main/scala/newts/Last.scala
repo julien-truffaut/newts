@@ -1,6 +1,6 @@
 package newts
 
-import cats.{Applicative, Eq, Eval, Monad, Semigroup, SemigroupK, Show, Traverse}
+import cats.{Applicative, Distributive, Eq, Eval, Functor, Monad, Semigroup, SemigroupK, Show, Traverse}
 import cats.syntax.functor._
 
 import scala.annotation.tailrec
@@ -43,5 +43,12 @@ trait LastInstances0 {
 
     def foldRight[A, B](fa: Last[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
       f(fa.getLast, lb)
+  }
+
+  implicit val distributiveInstance: Distributive[Last] = new Distributive[Last] {
+    def distribute[G[_], A, B](ga: G[A])(f: A => Last[B])(implicit ev: Functor[G]): Last[G[B]] =
+      Last(ga.map(f(_).getLast))
+
+    def map[A, B](fa: Last[A])(f: A => B): Last[B] = Last(f(fa.getLast))
   }
 }
