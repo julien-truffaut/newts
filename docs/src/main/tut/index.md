@@ -13,7 +13,7 @@ Newts defines newtypes compatible with [cats](https://github.com/typelevel/cats)
 
 ```scala
 libraryDependencies ++= Seq(
-  "com.github.julien-truffaut" %%  "newts-core"  % "0.1.1"
+  "com.github.julien-truffaut" %%  "newts-core"  % "0.3.2"
 )
 ```
 
