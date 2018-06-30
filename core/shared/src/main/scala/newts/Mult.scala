@@ -2,7 +2,7 @@ package newts
 
 import cats.kernel.{CommutativeMonoid, Eq}
 import cats.syntax.functor._
-import cats.{Applicative, Eval, CommutativeMonad, Show, Traverse}
+import cats.{Applicative, CommutativeMonad, Distributive, Eval, Functor, Show, Traverse}
 
 import scala.annotation.tailrec
 
@@ -43,5 +43,12 @@ trait MultInstances0 {
 
     def foldRight[A, B](fa: Mult[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
       f(fa.getMult, lb)
+  }
+
+  implicit val distributiveInstance: Distributive[Mult] = new Distributive[Mult] {
+    def distribute[G[_], A, B](ga: G[A])(f: A => Mult[B])(implicit ev: Functor[G]): Mult[G[B]] =
+      Mult(ga.map(f(_).getMult))
+
+    def map[A, B](fa: Mult[A])(f: A => B): Mult[B] = Mult(f(fa.getMult))
   }
 }

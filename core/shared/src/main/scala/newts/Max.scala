@@ -3,7 +3,7 @@ package newts
 import cats.kernel.{CommutativeMonoid, CommutativeSemigroup, Order}
 import cats.syntax.functor._
 import cats.syntax.order._
-import cats.{Applicative, Eval, CommutativeMonad, Show, Traverse}
+import cats.{Applicative, CommutativeMonad, Distributive, Eval, Functor, Show, Traverse}
 import newts.internal.MinBounded
 
 import scala.annotation.tailrec
@@ -48,5 +48,12 @@ trait MaxInstances0{
 
     def foldRight[A, B](fa: Max[A], lb: Eval[B])(f: (A, Eval[B]) => Eval[B]): Eval[B] =
       f(fa.getMax, lb)
+  }
+
+  implicit val distributiveInstance: Distributive[Max] = new Distributive[Max] {
+    def distribute[G[_], A, B](ga: G[A])(f: A => Max[B])(implicit ev: Functor[G]): Max[G[B]] =
+      Max(ga.map(f(_).getMax))
+
+    def map[A, B](fa: Max[A])(f: A => B): Max[B] = Max(f(fa.getMax))
   }
 }
