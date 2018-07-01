@@ -1,14 +1,12 @@
-import com.typesafe.sbt.SbtGhPages.GhPagesKeys._
-import org.scalajs.sbtplugin.ScalaJSPlugin.autoImport._
-import org.scalajs.sbtplugin.cross.CrossProject
+import com.typesafe.sbt.SbtSite.SiteKeys._
+import sbtcrossproject.crossProject
 import sbt.Keys._
 import sbtrelease.ReleasePlugin.autoImport.ReleaseTransformations._
-import sbtunidoc.Plugin.UnidocKeys._
 
 lazy val buildSettings = Seq(
   organization       := "com.github.julien-truffaut",
-  scalaVersion       := "2.12.4",
-  crossScalaVersions := Seq("2.12.4", "2.11.12"),
+  scalaVersion       := "2.12.6",
+  crossScalaVersions := Seq("2.12.6", "2.11.12"),
   scalacOptions     ++= Seq(
     "-deprecation",
     "-encoding", "UTF-8",
@@ -35,19 +33,20 @@ lazy val catsLaws  = Def.setting("org.typelevel" %%% "cats-laws" % catsVersion)
 
 lazy val scalatest = Def.setting("org.scalatest" %%% "scalatest" % "3.0.4" % "test")
 
-lazy val kindProjector  = "org.spire-math"  % "kind-projector" % "0.9.5" cross CrossVersion.binary
+lazy val kindProjector  = "org.spire-math"  % "kind-projector" % "0.9.7" cross CrossVersion.binary
 
 lazy val tagName = Def.setting(
  s"v${if (releaseUseGlobalVersion.value) (version in ThisBuild).value else version.value}")
 
 lazy val gitRev =
-  sys.process.Process("git rev-parse HEAD").lines_!.head
+  sys.process.Process("git rev-parse HEAD").lineStream_!.head
 
 lazy val scalajsSettings = Seq(
   scalacOptions += {
-    val s = if (isSnapshot.value) gitRev else tagName.value
+    lazy val tag = tagName.value
+    val s = if (isSnapshot.value) gitRev else tag
     val a = (baseDirectory in LocalRootProject).value.toURI.toString
-    val g = "https://raw.githubusercontent.com/julien-truffaut/newts"
+    val g = "https://raw.githubusercontent.com/julien-truffaut/Monocle"
     s"-P:scalajs:mapSourceURI:$a->$g/$s/"
   },
   jsEnv := new org.scalajs.jsenv.nodejs.NodeJSEnv(),
@@ -59,10 +58,6 @@ lazy val scalajsSettings = Seq(
 lazy val newtsSettings    = buildSettings ++ publishSettings
 lazy val newtsJvmSettings = newtsSettings
 lazy val newtsJsSettings  = newtsSettings ++ scalajsSettings
-
-lazy val newtsCrossSettings = (_: CrossProject)
-  .jvmSettings(newtsJvmSettings: _*)
-  .jsSettings(newtsJsSettings: _*)
 
 lazy val newts = project.in(file("."))
   .settings(moduleName := "newts")
@@ -84,16 +79,22 @@ lazy val newtsJS = project.in(file(".newtsJS"))
 
 lazy val coreJVM = core.jvm
 lazy val coreJS  = core.js
-lazy val core    = crossProject
+lazy val core    = crossProject(JVMPlatform, JSPlatform)
   .settings(moduleName := "newts-core")
-  .configureCross(newtsCrossSettings)
+  .configureCross(
+    _.jvmSettings(newtsJvmSettings),
+    _.jsSettings(newtsJsSettings)
+  )
   .settings(libraryDependencies += cats.value)
 
 lazy val testJVM = test.jvm
 lazy val testJS  = test.js
-lazy val test    = crossProject.dependsOn(core)
+lazy val test    = crossProject(JVMPlatform, JSPlatform).dependsOn(core)
   .settings(moduleName := "newts-test")
-  .configureCross(newtsCrossSettings)
+  .configureCross(
+    _.jvmSettings(newtsJvmSettings),
+    _.jsSettings(newtsJsSettings)
+  )
   .settings(noPublishSettings: _*)
   .settings(libraryDependencies ++= Seq(cats.value, catsLaws.value, scalatest.value))
 
@@ -106,16 +107,16 @@ lazy val bench = project.dependsOn(coreJVM)
 
 lazy val docs = project.dependsOn(coreJVM)
   .enablePlugins(MicrositesPlugin)
+  .enablePlugins(ScalaUnidocPlugin)
   .settings(moduleName := "newts-docs")
   .settings(newtsSettings)
   .settings(noPublishSettings)
-  .settings(unidocSettings)
-  .settings(ghpages.settings)
   .settings(docSettings)
-  .settings(tutScalacOptions ~= (_.filterNot(Set("-Ywarn-unused-import", "-Ywarn-dead-code"))))
+  .settings(scalacOptions in Tut ~= (_.filterNot(Set("-Ywarn-unused-import", "-Ywarn-dead-code"))))
   .settings(
     libraryDependencies ++= Seq(cats.value)
   )
+  .enablePlugins(GhpagesPlugin)
 
 lazy val docsMappingsAPIDir = settingKey[String]("Name of subdirectory in site target directory for api docs")
 
@@ -194,9 +195,10 @@ lazy val publishSettings = Seq(
 )
 
 lazy val noPublishSettings = Seq(
-  publish := (),
-  publishLocal := (),
-  publishArtifact := false
+  publish := {},
+  publishLocal := {},
+  publishArtifact := false,
+  skip in publish := true
 )
 
 addCommandAlias("validate", ";compile;test;unidoc;tut")
