@@ -31,7 +31,7 @@ lazy val catsVersion = "1.1.0"
 lazy val cats      = Def.setting("org.typelevel" %%% "cats-core" % catsVersion)
 lazy val catsLaws  = Def.setting("org.typelevel" %%% "cats-laws" % catsVersion)
 
-lazy val scalatest = Def.setting("org.scalatest" %%% "scalatest" % "3.0.4" % "test")
+lazy val scalatest = Def.setting("org.scalatest" %%% "scalatest" % "3.0.5" % "test")
 
 lazy val kindProjector  = "org.spire-math"  % "kind-projector" % "0.9.7" cross CrossVersion.binary
 
