@@ -35,6 +35,7 @@ trait ArbitraryInstances {
   implicit def minArbitrary[A: Arbitrary]: Arbitrary[Min[A]]  = arbNewtype[Min[A], A]
   implicit def maxArbitrary[A: Arbitrary]: Arbitrary[Max[A]]  = arbNewtype[Max[A], A]
   implicit def zipListArbitrary[A: Arbitrary]: Arbitrary[ZipList[A]] = arbNewtype[ZipList[A], List[A]]
+  implicit def backwardsArbitrary[F[_], A](implicit ev: Arbitrary[F[A]]): Arbitrary[Backwards[F, A]] = arbNewtype[Backwards[F, A], F[A]]
 
   implicit val allCogen: Cogen[All] = cogenNewtype[All, Boolean]
   implicit val anyCogen: Cogen[Any] = cogenNewtype[Any, Boolean]
@@ -47,4 +48,5 @@ trait ArbitraryInstances {
   implicit def minOptionCogen[A: Cogen] : Cogen[Min[A]]  = cogenNewtype[Min[A], A]
   implicit def maxOptionCogen[A: Cogen] : Cogen[Max[A]]  = cogenNewtype[Max[A], A]
   implicit def zipListCogen[A: Cogen]: Cogen[ZipList[A]] = cogenNewtype[ZipList[A], List[A]]
+  implicit def backwardsCogen[F[_], A](implicit ev: Cogen[F[A]]): Cogen[Backwards[F, A]] = cogenNewtype[Backwards[F, A], F[A]]
 }

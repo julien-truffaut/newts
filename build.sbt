@@ -15,6 +15,7 @@ lazy val buildSettings = Seq(
     "-unchecked",
     "-Xfatal-warnings",
     "-Yno-adapted-args",
+    "-Ypartial-unification",
     "-Ywarn-dead-code",
     "-Ywarn-value-discard",
     "-Xfuture"
