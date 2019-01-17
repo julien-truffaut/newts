@@ -5,6 +5,11 @@ import cats.syntax.functor._
 import cats.syntax.apply._
 import cats.kernel.CommutativeMonoid
 
+/**
+  * The same functor, but with an [[Applicative]] instance that performs actions in the reverse order.
+  *
+  * Based on Haskell's [[http://hackage.haskell.org/package/transformers-0.5.5.0/docs/Control-Applicative-Backwards.html Control.Applicative.Backwards]]
+  */
 final case class Backwards[F[_], A](forwards: F[A])
 
 object Backwards extends BackwardsInstances0
@@ -58,41 +63,52 @@ trait BackwardsInstances1 extends BackwardsInstances2 {
 }
 
 trait BackwardsInstances2 extends BackwardsInstances3 {
+  implicit def distributiveInstance[F[_]: Distributive]: Distributive[Backwards[F, ?]] =
+    new Distributive[Backwards[F, ?]] {
+      def distribute[G[_]: Functor, A, B](ga: G[A])(f: A => Backwards[F, B]): Backwards[F, G[B]] =
+        Backwards(Distributive[F].distribute(ga)(a => f(a).forwards))
+
+      def map[A, B](fa: Backwards[F, A])(f: A => B): Backwards[F, B] =
+        Backwards(Distributive[F].map(fa.forwards)(f))
+    }
+}
+
+trait BackwardsInstances3 extends BackwardsInstances4 {
   implicit def unorderedTraverseInstance[F[_]: UnorderedTraverse]: UnorderedTraverse[Backwards[F, ?]] =
     new BackwardsUnorderedTraverse[F] {
       val F: UnorderedTraverse[F] = UnorderedTraverse[F]
     }
 }
 
-trait BackwardsInstances3 extends BackwardsInstances4 {
+trait BackwardsInstances4 extends BackwardsInstances5 {
   implicit def reducibleInstance[F[_]: Reducible]: Reducible[Backwards[F, ?]] =
     new BackwardsReducible[F] {
       val F: Reducible[F] = Reducible[F]
     }
 }
 
-trait BackwardsInstances4 extends BackwardsInstances5 {
+trait BackwardsInstances5 extends BackwardsInstances6 {
   implicit def foldableInstance[F[_]: Foldable]: Foldable[Backwards[F, ?]] =
     new BackwardsFoldable[F] {
       val F: Foldable[F] = Foldable[F]
     }
 }
 
-trait BackwardsInstances5 extends BackwardsInstances6 {
+trait BackwardsInstances6 extends BackwardsInstances7 {
   implicit def unorderedFoldableInstance[F[_]: UnorderedFoldable]: UnorderedFoldable[Backwards[F, ?]] =
     new BackwardsUnorderedFoldable[F] {
       val F: UnorderedFoldable[F] = UnorderedFoldable[F]
     }
 }
 
-trait BackwardsInstances6 extends BackwardsInstances7 {
+trait BackwardsInstances7 extends BackwardsInstances8 {
   implicit def alternativeInstance[F[_]: Alternative]: Alternative[Backwards[F, ?]] =
     new Alternative[Backwards[F, ?]] with BackwardsApplicative[F] with BackwardsMonoidK[F] {
       val F: Alternative[F] = Alternative[F]
     }
 }
 
-trait BackwardsInstances7 extends BackwardsInstances8 {
+trait BackwardsInstances8 extends BackwardsInstances9 {
   implicit def applicativeErrorInstance[F[_]: ApplicativeError[?[_], E], E]: ApplicativeError[Backwards[F, ?], E] =
     new ApplicativeError[Backwards[F, ?], E] with BackwardsApplicative[F] {
       val F: ApplicativeError[F, E] = ApplicativeError[F, E]
@@ -105,7 +121,7 @@ trait BackwardsInstances7 extends BackwardsInstances8 {
     }
 }
 
-trait BackwardsInstances8 extends BackwardsInstances9 {
+trait BackwardsInstances9 extends BackwardsInstances10 {
   implicit def commutativeApplicativeInstance[F[_]: CommutativeApplicative]: CommutativeApplicative[Backwards[F, ?]] =
     new CommutativeApplicative[Backwards[F, ?]] with BackwardsApplicative[F] {
       val F: CommutativeApplicative[F] = CommutativeApplicative[F]
@@ -117,14 +133,14 @@ trait BackwardsInstances8 extends BackwardsInstances9 {
     }
 }
 
-trait BackwardsInstances9 extends BackwardsInstances10 {
+trait BackwardsInstances10 extends BackwardsInstances11 {
   implicit def semigroupKInstance[F[_]: SemigroupK]: SemigroupK[Backwards[F, ?]] =
     new BackwardsSemigroupK[F] {
       val F: SemigroupK[F] = SemigroupK[F]
     }
 }
 
-trait BackwardsInstances10 {
+trait BackwardsInstances11 {
   implicit def applicativeInstance[F[_]: Applicative]: Applicative[Backwards[F, ?]] =
     new BackwardsApplicative[F] {
       val F: Applicative[F] = Applicative[F]
