@@ -34,7 +34,7 @@ lazy val catsLaws  = Def.setting("org.typelevel" %%% "cats-laws" % catsVersion)
 
 lazy val scalatest = Def.setting("org.scalatest" %%% "scalatest" % "3.0.5" % "test")
 
-lazy val kindProjector  = "org.spire-math"  % "kind-projector" % "0.9.8" cross CrossVersion.binary
+lazy val kindProjector  = "org.spire-math"  % "kind-projector" % "0.9.9" cross CrossVersion.binary
 
 lazy val tagName = Def.setting(
  s"v${if (releaseUseGlobalVersion.value) (version in ThisBuild).value else version.value}")
