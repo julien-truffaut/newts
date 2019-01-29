@@ -4,19 +4,20 @@ import cats._
 import cats.data.{NonEmptyList, Writer}
 import cats.implicits._
 import cats.kernel.laws.discipline.{EqTests, OrderTests}
-import cats.laws.discipline.{AlternativeTests, ApplicativeErrorTests, CommutativeApplicativeTests, FunctorFilterTests, NonEmptyTraverseTests}
+import cats.laws.discipline.{AlternativeTests, ApplicativeErrorTests, CommutativeApplicativeTests, DistributiveTests, FunctorFilterTests, NonEmptyTraverseTests}
 import cats.laws.discipline.arbitrary._
 import fixtures.ShowTestClass
 
 class BackwardsTest extends NewtsSuite {
 
-  checkAll("Backwards[Option[Int]]", EqTests[Backwards[Option, Int]].eqv)
-  checkAll("Backwards[Option[Int]]", OrderTests[Backwards[Option, Int]].order)
-  checkAll("Backwards[Option[Int]]", AlternativeTests[Backwards[Option, ?]].alternative[Int, Int, Int])
-  checkAll("Backwards[Option[Int]]", CommutativeApplicativeTests[Backwards[Option, ?]].commutativeApplicative[Int, Int, Int])
-  checkAll("Backwards[List[Int]]", FunctorFilterTests[Backwards[List, ?]].functorFilter[Int, Int, Int])
-  checkAll("Backwards[NonEmptyList[Int]]", NonEmptyTraverseTests[Backwards[NonEmptyList, ?]].nonEmptyTraverse[Option, Int, Int, Int, Int, Option, Option])
-  checkAll("Backwards[Either[String, Int]]", ApplicativeErrorTests[Backwards[Either[String, ?], ?], String].applicativeError[Int, Int, Int])
+  checkAll("Backwards[Option, Int]", EqTests[Backwards[Option, Int]].eqv)
+  checkAll("Backwards[Option, Int]", OrderTests[Backwards[Option, Int]].order)
+  checkAll("Backwards[Option, Int]", AlternativeTests[Backwards[Option, ?]].alternative[Int, Int, Int])
+  checkAll("Backwards[Option, Int]", CommutativeApplicativeTests[Backwards[Option, ?]].commutativeApplicative[Int, Int, Int])
+  checkAll("Backwards[Last, Int]]", DistributiveTests[Backwards[Last, ?]].distributive[Int, Int, Int, Option, Function0])
+  checkAll("Backwards[List, Int]", FunctorFilterTests[Backwards[List, ?]].functorFilter[Int, Int, Int])
+  checkAll("Backwards[NonEmptyList, Int]", NonEmptyTraverseTests[Backwards[NonEmptyList, ?]].nonEmptyTraverse[Option, Int, Int, Int, Int, Option, Option])
+  checkAll("Backwards[Either[String, ?], Int]", ApplicativeErrorTests[Backwards[Either[String, ?], ?], String].applicativeError[Int, Int, Int])
 
   test("applies actions in reverse order") {
     val f1 = Writer.tell(List(1)) *> Writer.value(1)
